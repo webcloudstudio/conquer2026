@@ -34,6 +34,7 @@ class World(Base):
     # Map dimensions (0-based max coords, so actual size is mapx+1 × mapy+1)
     mapx: Mapped[int] = mapped_column(SmallInteger, default=79)
     mapy: Mapped[int] = mapped_column(SmallInteger, default=49)
+    max_players: Mapped[int] = mapped_column(SmallInteger, default=20)
 
     # Turn tracking
     turn: Mapped[int] = mapped_column(SmallInteger, default=0)

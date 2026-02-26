@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AppShell } from "./components/AppShell";
-import { LandingPage } from "./pages/LandingPage";
+import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { OpenWorldsPage } from "./pages/OpenWorldsPage";
@@ -27,13 +27,13 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<LandingPage />} />
+        {/* Public routes outside AppShell */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Authenticated routes — persistent AppShell navbar */}
+        {/* All app pages inside AppShell */}
         <Route element={<AppShell />}>
+          <Route path="/" element={<HomePage />} />
           <Route path="/worlds" element={<RequireAuth><OpenWorldsPage /></RequireAuth>} />
           <Route path="/manage" element={<RequireAuth><ManageWorldsPage /></RequireAuth>} />
           <Route path="/game/:worldId" element={<RequireAuth><GamePage /></RequireAuth>} />

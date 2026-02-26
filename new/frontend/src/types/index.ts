@@ -15,6 +15,8 @@ export interface World {
   is_maintenance: boolean;
   created_at: string;
   admins: WorldAdmin[];
+  max_players: number;
+  player_count: number;
 }
 
 export interface Nation {

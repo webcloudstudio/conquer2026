@@ -9,16 +9,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
+from app.models.nation import Nation
 from app.models.user import User
 from app.models.world import World, world_admins
 from app.routers.auth import get_current_user, require_world_admin
 from app.schemas.world import AddCoAdminRequest, WorldAdminInfo, WorldCreate, WorldOut
+from app.services.world_service import initialize_world
 
 router = APIRouter(prefix="/worlds", tags=["worlds"])
 
 
 def _world_to_out(w: World) -> dict:
     """Serialize a World ORM instance to a dict matching WorldOut."""
+    player_count = sum(1 for n in w.nations if not n.is_npc and n.is_active)
     return {
         "id": w.id,
         "name": w.name,
@@ -29,6 +32,8 @@ def _world_to_out(w: World) -> dict:
         "is_maintenance": w.is_maintenance,
         "created_at": w.created_at,
         "admins": [{"user_id": u.id, "username": u.username} for u in w.admins],
+        "max_players": w.max_players,
+        "player_count": player_count,
     }
 
 
@@ -37,7 +42,7 @@ async def list_worlds(db: Annotated[AsyncSession, Depends(get_db)]) -> list[dict
     result = await db.execute(
         select(World)
         .where(World.is_active == True)  # noqa: E712
-        .options(selectinload(World.admins))
+        .options(selectinload(World.admins), selectinload(World.nations))
     )
     return [_world_to_out(w) for w in result.scalars().all()]
 
@@ -52,7 +57,27 @@ async def list_my_worlds(
         select(World)
         .join(world_admins, World.id == world_admins.c.world_id)
         .where(world_admins.c.user_id == current_user.id, World.is_active == True)  # noqa: E712
-        .options(selectinload(World.admins))
+        .options(selectinload(World.admins), selectinload(World.nations))
+    )
+    return [_world_to_out(w) for w in result.scalars().all()]
+
+
+@router.get("/playing", response_model=list[WorldOut])
+async def list_playing_worlds(
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> list[dict]:
+    """Worlds where the current user has an active non-NPC nation."""
+    result = await db.execute(
+        select(World)
+        .join(Nation, Nation.world_id == World.id)
+        .where(
+            Nation.user_id == current_user.id,
+            Nation.is_npc == False,  # noqa: E712
+            Nation.is_active == True,  # noqa: E712
+            World.is_active == True,  # noqa: E712
+        )
+        .options(selectinload(World.admins), selectinload(World.nations))
     )
     return [_world_to_out(w) for w in result.scalars().all()]
 
@@ -60,7 +85,8 @@ async def list_my_worlds(
 @router.get("/{world_id}", response_model=WorldOut)
 async def get_world(world_id: str, db: Annotated[AsyncSession, Depends(get_db)]) -> dict:
     result = await db.execute(
-        select(World).where(World.id == world_id).options(selectinload(World.admins))
+        select(World).where(World.id == world_id)
+        .options(selectinload(World.admins), selectinload(World.nations))
     )
     world = result.scalar_one_or_none()
     if not world:
@@ -74,18 +100,37 @@ async def create_world(
     db: Annotated[AsyncSession, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> dict:
-    """Any authenticated user can create a world and becomes its first admin."""
-    world = World(name=body.name, mapx=body.mapx, mapy=body.mapy, creator_id=current_user.id)
+    """Any authenticated user can create a world and becomes its first admin.
+    The world map is automatically generated on creation."""
+    world = World(
+        name=body.name,
+        mapx=body.mapx,
+        mapy=body.mapy,
+        max_players=body.max_players,
+        creator_id=current_user.id,
+    )
     db.add(world)
     await db.flush()  # get world.id without committing
     await db.execute(
         insert(world_admins).values(world_id=world.id, user_id=current_user.id)
     )
-    await db.commit()
-    await db.refresh(world)
-    # reload with admins
+    await db.flush()
+
+    # Auto-initialize world map and NPC nations
+    await initialize_world(
+        world, db,
+        mapx=body.mapx,
+        mapy=body.mapy,
+        pwater=body.pwater,
+        pmount=body.pmount,
+        npc_count=body.npc_count,
+        seed=body.seed,
+    )
+
+    # Reload with admins and nations
     result = await db.execute(
-        select(World).where(World.id == world.id).options(selectinload(World.admins))
+        select(World).where(World.id == world.id)
+        .options(selectinload(World.admins), selectinload(World.nations))
     )
     return _world_to_out(result.scalar_one())
 

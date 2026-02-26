@@ -32,7 +32,7 @@ export function LoginPage() {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Conquer v5</h1>
+        <h1 style={styles.title}>Conquer 2026</h1>
         <p style={styles.sub}>Sign in to your account</p>
         <form onSubmit={handleSubmit} style={styles.form}>
           <input

@@ -1,5 +1,5 @@
 /**
- * Landing page — public entry point to Conquer v5.
+ * Landing page — public entry point to Conquer 2026.
  * Top bar: Play (→ worlds) and Manage Worlds (→ manage page, any logged-in user).
  * Left sidebar: links to the static documentation at /docs/.
  * Main area: "What is Conquer" overview.
@@ -41,7 +41,7 @@ export function LandingPage() {
     <div style={s.page}>
       {/* ── Top action bar ── */}
       <header style={s.topBar}>
-        <span style={s.logo}>⚔️ Conquer v5</span>
+        <span style={s.logo}>⚔️ Conquer 2026</span>
         <nav style={s.actions}>
           <button style={s.btnPlay} onClick={handlePlay}>▶ Play Game</button>
           <button style={s.btnAdmin} onClick={handleAdmin}>⚙ Manage Worlds</button>
@@ -77,9 +77,9 @@ export function LandingPage() {
 
         {/* Main content */}
         <main style={s.main}>
-          <h1 style={s.h1}>What is Conquer v5?</h1>
+          <h1 style={s.h1}>What is Conquer 2026?</h1>
           <p style={s.lead}>
-            Conquer v5 is an open-source, turn-based multiplayer strategy game — a
+            Conquer 2026 is an open-source, turn-based multiplayer strategy game — a
             modernised reboot of the classic 1987 USENET game. Nations compete for
             territory, resources, and dominance on a procedurally generated hex world.
           </p>
@@ -177,7 +177,7 @@ export function LandingPage() {
 
           <div style={s.origin}>
             <p>
-              <strong style={{ color: "#ffd700" }}>Origin:</strong> Conquer v5 is a
+              <strong style={{ color: "#ffd700" }}>Origin:</strong> Conquer 2026 is a
               GPL-relicensed (2025) revival of a 65,000-line C game written in 1987 for
               USENET distribution. The Python rewrite keeps the spirit of the original
               while redesigning onboarding, AI, and diplomacy.

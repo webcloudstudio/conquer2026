@@ -12,7 +12,6 @@
   --red: #f85149;
   --purple: #bc8cff;
   --sidebar-w: 220px;
-  --topbar-h: 44px;
 }
 
 html, body {
@@ -23,27 +22,9 @@ html, body {
   font-size: 15px;
   line-height: 1.65;
 }
-body { padding-top: var(--topbar-h); }
-
-.topbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 30;
-  height: var(--topbar-h);
-  display: flex; align-items: center; gap: 16px;
-  padding: 0 20px;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-}
-.topbar-logo { color: var(--gold); font-weight: bold; font-size: 16px; }
-.topbar-nav { display: flex; gap: 16px; }
-.topbar-nav a {
-  color: var(--muted); text-decoration: none; font-size: 13px;
-  padding: 4px 10px; border-radius: 5px; border: 1px solid transparent;
-}
-.topbar-nav a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
-.topbar-nav a.play { background: #238636; color: #fff; border-color: #238636; }
-.topbar-nav a.play:hover { background: #2ea043; }
 
 .sidebar {
-  position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+  position: fixed; top: 0; left: 0; bottom: 0;
   width: var(--sidebar-w);
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -151,8 +132,6 @@ li { margin: 4px 0; }
 .card p { margin: 0; font-size: 13px; color: var(--muted); }
 
 @media (max-width: 700px) {
-  .topbar { display: none; }
-  body { padding-top: 0; }
   .sidebar { display: none; }
   main { margin-left: 0; padding: 20px; }
   .grid2 { grid-template-columns: 1fr; }

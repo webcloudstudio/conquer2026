@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { listWorlds, processTurn, initWorld } from "../api/game";
+import { listWorlds, processTurn } from "../api/game";
 import { api } from "../api/client";
 import type { World } from "../types";
 import { useAuthStore } from "../store/auth";
@@ -30,7 +30,6 @@ export function AdminPage() {
   const [log, setLog] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
-  const [seed, setSeed] = useState("");
 
   useEffect(() => {
     if (user && !user.is_admin) navigate("/");
@@ -62,16 +61,6 @@ export function AdminPage() {
     }
   }
 
-  async function handleInitWorld(worldId: string, name: string) {
-    addLog(`Initializing ${name}…`);
-    try {
-      const res = await initWorld(worldId, { seed: seed ? parseInt(seed) : undefined });
-      addLog(`✓ ${name}: ${res.sectors} sectors, ${res.npc_nations} NPC nations`);
-    } catch (e: unknown) {
-      const err = e as { response?: { data?: { detail?: string } } };
-      addLog(`✗ ${name}: ${err?.response?.data?.detail ?? "error"}`);
-    }
-  }
 
   async function handleCreateWorld(e: React.FormEvent) {
     e.preventDefault();
@@ -132,18 +121,9 @@ export function AdminPage() {
                     {w.is_maintenance && <span style={styles.maint}>MAINT</span>}
                   </div>
                   <div style={styles.cardActions}>
-                    <button style={styles.btn} onClick={() => handleInitWorld(w.id, w.name)}>
-                      Initialize Map
-                    </button>
                     <button style={styles.btnDanger} onClick={() => handleProcessTurn(w.id, w.name)}>
                       Process Turn
                     </button>
-                    <input
-                      style={styles.seedInput}
-                      placeholder="seed (opt)"
-                      value={seed}
-                      onChange={(e) => setSeed(e.target.value)}
-                    />
                   </div>
                 </div>
               ))}

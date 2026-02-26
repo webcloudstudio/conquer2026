@@ -1,12 +1,12 @@
 /**
  * Manage Worlds — any authenticated user can create worlds and manage
  * the ones they administer.
- * World admins can: initialize map, process turns, toggle maintenance, add co-admins.
+ * World admins can: process turns, toggle maintenance, add co-admins.
  * Global admins additionally see the Users tab for server-level user management.
  */
 
 import React, { useEffect, useState } from "react";
-import { listMyWorlds, processTurn, initWorld, toggleMaintenance, addWorldAdmin } from "../api/game";
+import { listMyWorlds, processTurn, toggleMaintenance, addWorldAdmin } from "../api/game";
 import { api } from "../api/client";
 import type { World } from "../types";
 import { useAuthStore } from "../store/auth";
@@ -26,7 +26,13 @@ export function ManageWorldsPage() {
   const [log, setLog] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
-  const [seed, setSeed] = useState("");
+  const [newMapx, setNewMapx] = useState(79);
+  const [newMapy, setNewMapy] = useState(49);
+  const [newMaxPlayers, setNewMaxPlayers] = useState(20);
+  const [newPwater, setNewPwater] = useState(35);
+  const [newPmount, setNewPmount] = useState(20);
+  const [newNpcCount, setNewNpcCount] = useState(8);
+  const [newSeed, setNewSeed] = useState("");
   const [coAdminInputs, setCoAdminInputs] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -52,24 +58,23 @@ export function ManageWorldsPage() {
   async function handleCreateWorld(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await api.post("/worlds/", { name: newName, mapx: 79, mapy: 49 });
-      addLog(`✓ World "${newName}" created — you are its admin`);
-      setCreating(false); setNewName("");
+      await api.post("/worlds/", {
+        name: newName,
+        mapx: newMapx,
+        mapy: newMapy,
+        max_players: newMaxPlayers,
+        pwater: newPwater,
+        pmount: newPmount,
+        npc_count: newNpcCount,
+        seed: newSeed ? parseInt(newSeed) : undefined,
+      });
+      addLog(`✓ World "${newName}" created and initialized`);
+      setCreating(false);
+      setNewName(""); setNewSeed("");
       await loadWorlds();
     } catch (e: unknown) {
       const err = e as { response?: { data?: { detail?: string } } };
       addLog(`✗ Create: ${err?.response?.data?.detail ?? "error"}`);
-    }
-  }
-
-  async function handleInit(w: World) {
-    addLog(`Initializing ${w.name}…`);
-    try {
-      const r = await initWorld(w.id, { seed: seed ? parseInt(seed) : undefined });
-      addLog(`✓ ${w.name}: ${r.sectors} sectors, ${r.npc_nations} NPC nations`);
-    } catch (e: unknown) {
-      const err = e as { response?: { data?: { detail?: string } } };
-      addLog(`✗ ${w.name} init: ${err?.response?.data?.detail ?? "error"}`);
     }
   }
 
@@ -155,7 +160,7 @@ export function ManageWorldsPage() {
                   <div style={s.cardTop}>
                     <div>
                       <span style={s.worldName}>{w.name}</span>
-                      <span style={s.meta}> · Turn {w.turn} · {w.mapx}×{w.mapy}</span>
+                      <span style={s.meta}> · Turn {w.turn} · {w.mapx}×{w.mapy} · {w.player_count}/{w.max_players} players</span>
                       {w.is_maintenance && <span style={s.maintBadge}>MAINT</span>}
                     </div>
                     <div style={s.adminList}>
@@ -163,17 +168,10 @@ export function ManageWorldsPage() {
                     </div>
                   </div>
                   <div style={s.actions}>
-                    <button style={s.btn} onClick={() => handleInit(w)}>Init Map</button>
                     <button style={s.btnWarn} onClick={() => handleTurn(w)}>Process Turn</button>
                     <button style={s.btnGhost} onClick={() => handleMaint(w)}>
-                      {w.is_maintenance ? "Disable Maint" : "Enable Maint"}
+                      {w.is_maintenance ? "Disable Maintenance Mode" : "Enable Maintenance Mode"}
                     </button>
-                    <input
-                      style={s.seedIn}
-                      placeholder="seed (opt)"
-                      value={seed}
-                      onChange={(e) => setSeed(e.target.value)}
-                    />
                   </div>
                   <div style={s.coAdminRow}>
                     <input
@@ -260,8 +258,39 @@ export function ManageWorldsPage() {
             <form onSubmit={handleCreateWorld} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <input style={s.input} placeholder="World name" value={newName}
                 onChange={(e) => setNewName(e.target.value)} required autoFocus />
+
+              <div style={s.fieldRow}>
+                <label style={s.label}>Map Width</label>
+                <input style={s.inputSm} type="number" value={newMapx} min={20} max={200}
+                  onChange={(e) => setNewMapx(parseInt(e.target.value) || 79)} />
+                <label style={s.label}>Map Height</label>
+                <input style={s.inputSm} type="number" value={newMapy} min={20} max={200}
+                  onChange={(e) => setNewMapy(parseInt(e.target.value) || 49)} />
+              </div>
+
+              <div style={s.fieldRow}>
+                <label style={s.label}>Max Players</label>
+                <input style={s.inputSm} type="number" value={newMaxPlayers} min={2} max={200}
+                  onChange={(e) => setNewMaxPlayers(parseInt(e.target.value) || 20)} />
+                <label style={s.label}>NPC Nations</label>
+                <input style={s.inputSm} type="number" value={newNpcCount} min={0} max={20}
+                  onChange={(e) => setNewNpcCount(parseInt(e.target.value) || 8)} />
+              </div>
+
+              <div style={s.fieldRow}>
+                <label style={s.label}>Water %</label>
+                <input style={s.inputSm} type="number" value={newPwater} min={0} max={80}
+                  onChange={(e) => setNewPwater(parseInt(e.target.value) || 35)} />
+                <label style={s.label}>Mountain %</label>
+                <input style={s.inputSm} type="number" value={newPmount} min={0} max={50}
+                  onChange={(e) => setNewPmount(parseInt(e.target.value) || 20)} />
+              </div>
+
+              <input style={s.input} placeholder="Game seed (optional)" value={newSeed}
+                onChange={(e) => setNewSeed(e.target.value)} type="number" />
+
               <div style={{ display: "flex", gap: 8 }}>
-                <button type="submit" style={s.createBtn}>Create</button>
+                <button type="submit" style={s.createBtn}>Create &amp; Initialize</button>
                 <button type="button" style={s.cancelBtn} onClick={() => setCreating(false)}>Cancel</button>
               </div>
             </form>
@@ -320,10 +349,6 @@ const s: Record<string, React.CSSProperties> = {
     padding: "4px 12px", background: "none", border: "1px solid #30363d",
     borderRadius: 5, color: "#8b949e", cursor: "pointer", fontSize: 12,
   },
-  seedIn: {
-    padding: "4px 8px", background: "#0d1117", border: "1px solid #30363d",
-    borderRadius: 5, color: "#fff", fontSize: 12, width: 80,
-  },
   coAdminIn: {
     flex: 1, padding: "5px 10px", background: "#0d1117", border: "1px solid #30363d",
     borderRadius: 5, color: "#fff", fontSize: 12,
@@ -362,12 +387,18 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100,
   },
   modal: {
-    background: "#161b22", border: "1px solid #30363d", borderRadius: 8, padding: 24, width: 360,
+    background: "#161b22", border: "1px solid #30363d", borderRadius: 8, padding: 24, width: 420,
   },
   input: {
     padding: "8px 10px", background: "#0d1117", border: "1px solid #30363d",
-    borderRadius: 5, color: "#fff", fontSize: 13, width: "100%",
+    borderRadius: 5, color: "#fff", fontSize: 13, width: "100%", boxSizing: "border-box",
   },
+  inputSm: {
+    padding: "6px 8px", background: "#0d1117", border: "1px solid #30363d",
+    borderRadius: 5, color: "#fff", fontSize: 13, width: 70,
+  },
+  fieldRow: { display: "flex", alignItems: "center", gap: 8 },
+  label: { color: "#8b949e", fontSize: 12, whiteSpace: "nowrap" },
   cancelBtn: {
     padding: "6px 14px", background: "none", border: "1px solid #555",
     borderRadius: 5, color: "#aaa", cursor: "pointer",

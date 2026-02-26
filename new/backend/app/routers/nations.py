@@ -6,6 +6,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.nation import Nation
@@ -52,11 +53,21 @@ async def join_world(
     """Register the current user as a new nation in this world."""
     # Verify world exists and is active
     world_result = await db.execute(
-        select(World).where(World.id == world_id, World.is_active == True)  # noqa: E712
+        select(World)
+        .where(World.id == world_id, World.is_active == True)  # noqa: E712
+        .options(selectinload(World.nations))
     )
     world = world_result.scalar_one_or_none()
     if not world:
         raise HTTPException(status_code=404, detail="World not found or not active")
+
+    # Enforce max player cap
+    player_count = sum(1 for n in world.nations if not n.is_npc and n.is_active)
+    if player_count >= world.max_players:
+        raise HTTPException(
+            status_code=400,
+            detail=f"World is full ({world.max_players} players max)",
+        )
 
     # One nation per user per world
     existing = await db.execute(

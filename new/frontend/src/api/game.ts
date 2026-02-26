@@ -55,6 +55,9 @@ export const markRead = (worldId: string, messageId: string) =>
 // My administered worlds
 export const listMyWorlds = () => api.get<World[]>("/worlds/mine").then((r) => r.data);
 
+// Worlds where current user is an active player
+export const listPlayingWorlds = () => api.get<World[]>("/worlds/playing").then((r) => r.data);
+
 // Add co-admin to a world
 export const addWorldAdmin = (worldId: string, username: string) =>
   api.post(`/worlds/${worldId}/admins`, { username }).then((r) => r.data);
@@ -62,11 +65,6 @@ export const addWorldAdmin = (worldId: string, username: string) =>
 // Admin
 export const processTurn = (worldId: string) =>
   api.post(`/admin/worlds/${worldId}/process-turn`).then((r) => r.data);
-
-export const initWorld = (worldId: string, params?: {
-  mapx?: number; mapy?: number; pwater?: number; pmount?: number;
-  npc_count?: number; seed?: number;
-}) => api.post(`/admin/worlds/${worldId}/initialize`, null, { params }).then((r) => r.data);
 
 export const toggleMaintenance = (worldId: string) =>
   api.post(`/admin/worlds/${worldId}/maintenance`).then((r) => r.data);
