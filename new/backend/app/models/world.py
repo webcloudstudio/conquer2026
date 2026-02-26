@@ -9,11 +9,20 @@ queryability; game-balance tweaks that are rarely queried live in JSON.
 import uuid
 from datetime import datetime
 
-from sqlalchemy import JSON, BigInteger, Boolean, DateTime, Integer, SmallInteger, String, func
+from sqlalchemy import JSON, BigInteger, Boolean, Column, DateTime, ForeignKey, Integer, SmallInteger, String, Table, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
+
+# Association table: which users are admins of which worlds
+world_admins = Table(
+    "world_admins",
+    Base.metadata,
+    Column("world_id", UUID(as_uuid=True), ForeignKey("worlds.id", ondelete="CASCADE"), primary_key=True),
+    Column("user_id", UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
+    Column("granted_at", DateTime(timezone=True), server_default=func.now()),
+)
 
 
 class World(Base):
@@ -33,6 +42,11 @@ class World(Base):
     # World state
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_maintenance: Mapped[bool] = mapped_column(Boolean, default=False)  # conqrun -T
+
+    # Creator (first world admin)
+    creator_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
 
     # God/admin account
     demigod_name: Mapped[str] = mapped_column(String(10), default="god")
@@ -73,6 +87,9 @@ class World(Base):
     cities: Mapped[list["City"]] = relationship("City", back_populates="world")  # noqa: F821
     artifacts: Mapped[list["Artifact"]] = relationship("Artifact", back_populates="world")  # noqa: F821
     events: Mapped[list["WorldEvent"]] = relationship("WorldEvent", back_populates="world")  # noqa: F821
+    admins: Mapped[list["User"]] = relationship(  # noqa: F821
+        "User", secondary=world_admins, lazy="selectin"
+    )
 
 
 def _default_config() -> dict:

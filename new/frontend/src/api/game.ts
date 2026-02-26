@@ -52,6 +52,13 @@ export const sendMessage = (worldId: string, body: {
 export const markRead = (worldId: string, messageId: string) =>
   api.post(`/worlds/${worldId}/messages/${messageId}/read`).then((r) => r.data);
 
+// My administered worlds
+export const listMyWorlds = () => api.get<World[]>("/worlds/mine").then((r) => r.data);
+
+// Add co-admin to a world
+export const addWorldAdmin = (worldId: string, username: string) =>
+  api.post(`/worlds/${worldId}/admins`, { username }).then((r) => r.data);
+
 // Admin
 export const processTurn = (worldId: string) =>
   api.post(`/admin/worlds/${worldId}/process-turn`).then((r) => r.data);
@@ -60,3 +67,6 @@ export const initWorld = (worldId: string, params?: {
   mapx?: number; mapy?: number; pwater?: number; pmount?: number;
   npc_count?: number; seed?: number;
 }) => api.post(`/admin/worlds/${worldId}/initialize`, null, { params }).then((r) => r.data);
+
+export const toggleMaintenance = (worldId: string) =>
+  api.post(`/admin/worlds/${worldId}/maintenance`).then((r) => r.data);

@@ -9,7 +9,7 @@ from app.models.nation import DiplomaticRelation, Nation
 from app.models.navy import Navy
 from app.models.sector import Sector
 from app.models.user import User
-from app.models.world import World
+from app.models.world import World, world_admins
 from app.models.world_event import WorldEvent
 
 __all__ = [
@@ -29,4 +29,5 @@ __all__ = [
     "CommandType",
     "Message",
     "User",
+    "world_admins",
 ]

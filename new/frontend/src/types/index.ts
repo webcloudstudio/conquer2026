@@ -1,5 +1,10 @@
 // Core game types mirroring the backend schemas
 
+export interface WorldAdmin {
+  user_id: string;
+  username: string;
+}
+
 export interface World {
   id: string;
   name: string;
@@ -8,6 +13,8 @@ export interface World {
   mapy: number;
   is_active: boolean;
   is_maintenance: boolean;
+  created_at: string;
+  admins: WorldAdmin[];
 }
 
 export interface Nation {

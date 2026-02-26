@@ -1,6 +1,6 @@
 /**
  * Landing page — public entry point to Conquer v5.
- * Top bar: Play (→ worlds) and Admin Setup (→ admin panel).
+ * Top bar: Play (→ worlds) and Manage Worlds (→ manage page, any logged-in user).
  * Left sidebar: links to the static documentation at /docs/.
  * Main area: "What is Conquer" overview.
  */
@@ -33,9 +33,8 @@ export function LandingPage() {
   }
 
   function handleAdmin() {
-    if (!user) navigate("/login?next=/admin");
-    else if (user.is_admin) navigate("/admin");
-    else alert("Admin access required. Ask a server administrator to promote your account.");
+    if (user) navigate("/manage");
+    else navigate("/login?next=/manage");
   }
 
   return (
@@ -45,7 +44,7 @@ export function LandingPage() {
         <span style={s.logo}>⚔️ Conquer v5</span>
         <nav style={s.actions}>
           <button style={s.btnPlay} onClick={handlePlay}>▶ Play Game</button>
-          <button style={s.btnAdmin} onClick={handleAdmin}>⚙ Admin Setup</button>
+          <button style={s.btnAdmin} onClick={handleAdmin}>⚙ Manage Worlds</button>
         </nav>
         <div style={s.authArea}>
           {user ? (
@@ -100,13 +99,13 @@ export function LandingPage() {
             </div>
             <div style={s.ctaCard}>
               <div style={s.ctaIcon}>⚙</div>
-              <h3 style={s.ctaTitle}>Run a Server</h3>
+              <h3 style={s.ctaTitle}>Manage Worlds</h3>
               <p style={s.ctaText}>
-                Administrators create game worlds, manage players, configure the map,
-                and control turn processing from the Admin Panel.
+                Any registered user can create and administer game worlds — configure
+                the map, add co-admins, and control turn processing.
               </p>
               <button style={s.btnAdmin} onClick={handleAdmin}>
-                {user?.is_admin ? "Open Admin Panel" : "Admin Sign In"}
+                {user ? "Open World Manager" : "Sign In to Manage"}
               </button>
             </div>
           </div>

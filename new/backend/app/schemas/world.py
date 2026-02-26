@@ -10,6 +10,11 @@ class WorldCreate(BaseModel):
     mapy: int = 49
 
 
+class WorldAdminInfo(BaseModel):
+    user_id: uuid.UUID
+    username: str
+
+
 class WorldOut(BaseModel):
     id: uuid.UUID
     name: str
@@ -17,6 +22,12 @@ class WorldOut(BaseModel):
     mapy: int
     turn: int
     is_active: bool
+    is_maintenance: bool
     created_at: datetime
+    admins: list[WorldAdminInfo] = []
 
     model_config = {"from_attributes": True}
+
+
+class AddCoAdminRequest(BaseModel):
+    username: str
