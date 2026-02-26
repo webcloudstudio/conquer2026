@@ -44,16 +44,35 @@ services:
     command: >
       sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
-  # Phase 4: Celery worker for turn processing
-  # worker:
-  #   build: ./backend
-  #   environment:
-  #     DATABASE_URL: postgresql+asyncpg://conquer:conquer@db:5432/conquer
-  #     REDIS_URL: redis://redis:6379/0
-  #   depends_on:
-  #     - db
-  #     - redis
-  #   command: celery -A app.tasks worker --loglevel=info
+  worker:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://conquer:conquer@db:5432/conquer
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-change-in-production
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: celery -A app.tasks.celery_app:celery_app worker --loglevel=info
+
+  beat:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://conquer:conquer@db:5432/conquer
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-change-in-production
+    depends_on:
+      - redis
+    command: celery -A app.tasks.celery_app:celery_app beat --loglevel=info
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
