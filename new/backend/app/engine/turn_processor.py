@@ -22,6 +22,7 @@ Reference constants from header.h.dist:
 
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass, field
 
 from app.engine.economy import (
@@ -34,7 +35,20 @@ from app.engine.economy import (
     compute_sector_consumption,
     compute_sector_production,
 )
+from app.engine.events import (
+    ActiveEvent,
+    EventNationState,
+    EventSectorState,
+    process_events,
+)
 from app.engine.magic import apply_passive_powers, regen_magic_power
+from app.engine.npc_ai import (
+    NpcArmy,
+    NpcNation,
+    NpcOrder,
+    NpcSector,
+    run_npc_turn,
+)
 
 # ---------------------------------------------------------------------------
 # Starvation / desertion constants  (header.h.dist)
@@ -149,6 +163,8 @@ class TurnLog:
     sector_production: dict = field(default_factory=dict)   # nation_id → Resources
     army_starvation: dict = field(default_factory=dict)     # army_id → deaths
     magic_regen: dict = field(default_factory=dict)         # nation_id → (mil,civ,wiz)
+    active_events: list[ActiveEvent] = field(default_factory=list)
+    npc_orders: list[NpcOrder] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -327,6 +343,145 @@ def upd_magic(
 
 
 # ---------------------------------------------------------------------------
+# Phase 3a — World events
+# ---------------------------------------------------------------------------
+
+def upd_events(
+    nations: dict[object, NationState],
+    sectors: list[SectorState],
+    active_events: list[ActiveEvent],
+    event_rate: float,
+    log: TurnLog,
+    rng: random.Random | None = None,
+) -> list[ActiveEvent]:
+    """
+    Fire and advance world events, apply their effects to nations and sectors.
+    Returns the updated list of still-active events.
+    """
+    # Bridge to event engine lightweight types
+    ev_sectors = [
+        EventSectorState(
+            x=s.x, y=s.y,
+            designation=s.designation,
+            efficiency=s.efficiency,
+            population=s.population,
+        )
+        for s in sectors
+    ]
+    ev_nations = [
+        EventNationState(
+            id=str(n.id),
+            food=n.res_food,
+            attr_morale=n.attr_morale,
+            attr_spell_pts=n.attr_spell_pts,
+            victory_points=n.victory_points,
+            power_military=n.power_military,
+        )
+        for n in nations.values()
+    ]
+
+    result = process_events(ev_sectors, ev_nations, active_events, event_rate, rng)
+    log.messages.extend(result.messages)
+
+    # Apply nation changes back
+    nation_lookup = {str(nid): ntn for nid, ntn in nations.items()}
+    for chg in result.nation_changes:
+        ntn = nation_lookup.get(chg["nation_id"])
+        if ntn is None:
+            continue
+        field_name = chg["field"]
+        delta = chg["delta"]
+        if field_name == "attr_morale":
+            ntn.attr_morale = max(0, min(100, ntn.attr_morale + delta))
+        elif field_name == "food":
+            ntn.res_food = max(0, ntn.res_food + delta)
+        elif field_name == "power_military":
+            ntn.power_military = max(0, ntn.power_military + delta)
+        elif field_name == "attr_spell_pts":
+            ntn.attr_spell_pts = max(0, ntn.attr_spell_pts + delta)
+        elif field_name == "victory_points":
+            ntn.victory_points = max(0, ntn.victory_points + delta)
+
+    # Apply sector efficiency changes back
+    sector_lookup = {(s.x, s.y): s for s in sectors}
+    for chg in result.sector_changes:
+        sct = sector_lookup.get((chg["x"], chg["y"]))
+        if sct is None:
+            continue
+        if chg["field"] == "efficiency":
+            sct.efficiency = max(0, min(100, sct.efficiency + chg["delta"]))
+        elif chg["field"] == "population":
+            sct.population = max(0, sct.population + chg["delta"])
+        elif chg["field"] == "minerals":
+            sct.minerals = max(0, sct.minerals + chg["delta"])
+
+    return result.active_events
+
+
+# ---------------------------------------------------------------------------
+# Phase 3b — NPC AI turns
+# ---------------------------------------------------------------------------
+
+def upd_npc_ai(
+    npc_nation_ids: set[object],
+    nations: dict[object, NationState],
+    sectors: list[SectorState],
+    armies: list[ArmyState],
+    log: TurnLog,
+    rng: random.Random | None = None,
+) -> None:
+    """
+    Run the NPC AI for all computer-controlled nations.
+    Appends NpcOrder objects to log.npc_orders for the turn service to apply.
+    """
+    if rng is None:
+        rng = random.Random()
+
+    # Build shared sector + army maps for the AI
+    npc_sectors = [
+        NpcSector(
+            x=s.x, y=s.y,
+            altitude=s.altitude,
+            designation=s.designation,
+            efficiency=s.efficiency,
+            population=s.population,
+            minerals=s.minerals,
+            owner_nation_id=str(s.owner_nation_id) if s.owner_nation_id else None,
+        )
+        for s in sectors
+    ]
+    all_npc_armies = [
+        NpcArmy(
+            id=str(a.id),
+            nation_id=str(a.nation_id),
+            strength=a.strength,
+            efficiency=80,
+            movement=2,
+            x=getattr(a, "x", 0),
+            y=getattr(a, "y", 0),
+        )
+        for a in armies if a.is_active
+    ]
+
+    for nid in npc_nation_ids:
+        ntn = nations.get(nid)
+        if ntn is None:
+            continue
+
+        npc_nation = NpcNation(
+            id=str(nid),
+            player_class=ntn.player_class or "warlord",
+            food=ntn.res_food,
+            talons=ntn.res_talons,
+        )
+        nation_armies = [a for a in all_npc_armies if a.nation_id == str(nid)]
+
+        turn_result = run_npc_turn(npc_nation, nation_armies, npc_sectors, all_npc_armies, rng)
+        log.npc_orders.extend(turn_result.orders)
+        log.messages.extend(turn_result.messages)
+
+
+# ---------------------------------------------------------------------------
 # Phase 4 — Victory point computation (new system)
 # ---------------------------------------------------------------------------
 
@@ -383,6 +538,10 @@ def process_turn(
     armies: list[ArmyState] | None = None,
     navies: list[NavyState] | None = None,
     caravans: list[CaravanState] | None = None,
+    active_events: list[ActiveEvent] | None = None,
+    npc_nation_ids: set[object] | None = None,
+    event_rate: float = 1.0,
+    rng: random.Random | None = None,
 ) -> TurnLog:
     """
     Process a complete game turn.
@@ -391,11 +550,19 @@ def process_turn(
 
     Returns a TurnLog describing what happened this turn.
     Caller is responsible for persisting state changes to the database.
+
+    active_events: list of ongoing world events (mutated in place by upd_events)
+    npc_nation_ids: set of nation IDs controlled by the AI (not human players)
+    event_rate: multiplier for event frequency (0=none, 1=normal, 2=chaotic)
     """
     log = TurnLog(turn=turn)
     armies = armies or []
     navies = navies or []
     caravans = caravans or []
+    active_events = active_events or []
+    npc_nation_ids = npc_nation_ids or set()
+    if rng is None:
+        rng = random.Random()
 
     log.messages.append(f"--- Turn {turn} begin ---")
 
@@ -407,19 +574,20 @@ def process_turn(
     upd_consume(nations, armies, navies, caravans, log)
     log.messages.append("Unit upkeep applied")
 
-    # Phase 3: Army/navy movement and combat (Phase 3 feature — stub)
-    # upd_armies(nations, sectors, armies, log)
-    # upd_navies(nations, sectors, navies, log)
-    # upd_caravans(nations, sectors, caravans, log)
+    # Phase 3a: World events
+    log.active_events = upd_events(nations, sectors, active_events, event_rate, log, rng)
+    log.messages.append(f"Events processed ({len(log.active_events)} active)")
+
+    # Phase 3b: NPC AI turns
+    if npc_nation_ids:
+        upd_npc_ai(npc_nation_ids, nations, sectors, armies, log, rng)
+        log.messages.append(f"NPC AI issued {len(log.npc_orders)} orders")
 
     # Phase 4: Magic regeneration
     upd_magic(nations, log)
     log.messages.append("Magic regenerated")
 
-    # Phase 5: World events (Phase 3 feature — stub)
-    # upd_events(nations, sectors, log)
-
-    # Phase 6: Victory points
+    # Phase 5: Victory points
     upd_victory(nations, sectors, log)
     log.messages.append(f"--- Turn {turn} complete ---")
 
