@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Administration — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="game-admin.html" class="active">Game Administration</a></li>
+    <li><a href="gameplay.html">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html">Economy &amp; Resources</a></li>
+    <li><a href="military.html">Military &amp; Combat</a></li>
+    <li><a href="magic.html">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html">Admin API Reference</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>Game Administration</h1>
+  <p>
+    This guide covers everything needed to run a Conquer v5 server: registering users,
+    promoting admins, creating game worlds, and managing turns — all through the web UI.
+  </p>
+
+  <h2>Step 1 — First Admin User</h2>
+  <p>
+    After the server starts for the first time, anyone can register at
+    <strong>http://localhost:5174</strong>. The first person to register should be
+    the server administrator. After registering, promote that account to admin via
+    the database (one-time bootstrap only):
+  </p>
+  <pre><code>docker compose exec db psql -U conquer
+UPDATE users SET is_admin = true WHERE username = 'yourname';
+\q</code></pre>
+  <p>
+    Once logged in as admin, the <strong>Admin</strong> button appears in the top-right
+    of the world list. All future admin promotions can be done entirely through the UI.
+  </p>
+
+  <div class="callout">
+    Only the very first admin requires a database command. Every subsequent admin can be
+    promoted from the Admin Panel → Users tab by any existing admin.
+  </div>
+
+  <h2>Step 2 — Managing Users</h2>
+  <p>
+    Open the Admin Panel and select the <strong>Users</strong> tab. You will see every
+    registered account with their status, role, and join date.
+  </p>
+  <table>
+    <tr><th>Action</th><th>Button</th><th>Effect</th></tr>
+    <tr><td>Promote to admin</td><td>Promote</td><td>User gains access to the Admin Panel</td></tr>
+    <tr><td>Remove admin</td><td>Demote</td><td>User loses Admin Panel access; account stays active</td></tr>
+    <tr><td>Ban a player</td><td>Ban</td><td>Account is deactivated; user cannot log in</td></tr>
+    <tr><td>Restore access</td><td>Unban</td><td>Re-activates the account</td></tr>
+  </table>
+  <p>
+    You cannot promote, demote, or ban your own account. At least one active admin must
+    always exist.
+  </p>
+
+  <h2>Step 3 — Creating a Game World</h2>
+  <ol>
+    <li>In the Admin Panel → <strong>Worlds</strong> tab, click <strong>+ New World</strong></li>
+    <li>Enter a world name (e.g. <em>Alpha</em>) and click Create</li>
+    <li>The world appears in the list at Turn 0, not yet initialised</li>
+    <li>Click <strong>Initialize Map</strong> on the new world. Optionally enter a numeric
+        seed in the seed field for a reproducible map</li>
+    <li>
+      Map generation runs and produces:
+      <ul>
+        <li>A hex grid (default 79 × 49 tiles)</li>
+        <li>Terrain with water, plains, mountains, forests, and deserts</li>
+        <li>8 NPC nations placed at viable starting locations</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>Step 4 — Players Joining</h2>
+  <p>
+    Players register their own accounts at the login page. Once logged in they see the
+    world list. To join a world they click <strong>Join</strong>, choose a nation name
+    and player class. They are placed on the map and can begin submitting orders.
+  </p>
+  <p>
+    There is no player limit per world. NPC nations fill the map until enough human
+    players join.
+  </p>
+
+  <h2>Turn Processing</h2>
+  <p>
+    Turns process automatically every 6 hours via the Celery scheduler. You can also
+    trigger a turn manually at any time from the Admin Panel → Worlds tab by clicking
+    <strong>Process Turn</strong>. The Activity Log on the right shows the result.
+  </p>
+  <table>
+    <tr><th>Method</th><th>How</th></tr>
+    <tr><td>Automatic</td><td>Celery beat fires every 6 hours; processes all active worlds</td></tr>
+    <tr><td>Manual (UI)</td><td>Admin Panel → Worlds → Process Turn button</td></tr>
+    <tr><td>Manual (API)</td><td><code>POST /admin/worlds/{id}/process-turn</code> with Bearer token</td></tr>
+    <tr><td>Manual (CLI)</td><td>See <a href="admin.html">Admin API Reference</a> for Celery commands</td></tr>
+  </table>
+
+  <h2>Maintenance Mode</h2>
+  <p>
+    Toggling maintenance mode on a world blocks all player logins to that world while
+    you make changes. The Celery scheduler skips worlds in maintenance. Toggle it via
+    <code>POST /admin/worlds/{id}/maintenance</code> or directly in the database.
+  </p>
+
+  <h2>Map Configuration</h2>
+  <p>
+    The default map is 79 × 49 hexes. To customise, pass query parameters to the
+    Initialize Map API call (see <a href="admin.html">Admin API Reference</a>) or edit
+    the defaults in the Admin Panel before initialising.
+  </p>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>mapx</td><td>79</td><td>Map width in hex columns</td></tr>
+    <tr><td>mapy</td><td>49</td><td>Map height in hex rows</td></tr>
+    <tr><td>pwater</td><td>35</td><td>% of map that becomes ocean</td></tr>
+    <tr><td>pmount</td><td>20</td><td>% of land that becomes mountains</td></tr>
+    <tr><td>npc_count</td><td>8</td><td>Number of NPC nations to generate</td></tr>
+    <tr><td>seed</td><td>random</td><td>Integer seed for reproducible maps</td></tr>
+  </table>
+
+  <h2>Backing Up Game Data</h2>
+  <pre><code># Dump the database
+docker compose exec db pg_dump -U conquer conquer > backup.sql
+
+# Restore
+cat backup.sql | docker compose exec -T db psql -U conquer conquer</code></pre>
+
+  <h2>Quick-Start Checklist</h2>
+  <ol>
+    <li>Run <code>docker compose up --build</code></li>
+    <li>Run <code>docker compose exec backend alembic upgrade head</code></li>
+    <li>Register your account at <a href="http://localhost:5174">localhost:5174</a></li>
+    <li>Promote yourself: <code>UPDATE users SET is_admin = true WHERE username = 'you';</code></li>
+    <li>Open Admin Panel → create a world → Initialize Map</li>
+    <li>Share the URL with players and let them register and join</li>
+    <li>Process the first turn manually or wait for the scheduler</li>
+  </ol>
+</main>
+</body>
+</html>

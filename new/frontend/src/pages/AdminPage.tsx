@@ -1,5 +1,5 @@
 /**
- * Admin panel — world management, turn processing, world initialization.
+ * Admin panel — world management, turn processing, user management.
  * Only accessible to users with is_admin=true.
  */
 
@@ -10,10 +10,23 @@ import { api } from "../api/client";
 import type { World } from "../types";
 import { useAuthStore } from "../store/auth";
 
+interface AdminUser {
+  id: string;
+  username: string;
+  email: string;
+  is_active: boolean;
+  is_admin: boolean;
+  created_at: string;
+}
+
+type Tab = "worlds" | "users";
+
 export function AdminPage() {
   const { user } = useAuthStore();
   const navigate = useNavigate();
+  const [tab, setTab] = useState<Tab>("worlds");
   const [worlds, setWorlds] = useState<World[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [log, setLog] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
@@ -22,7 +35,17 @@ export function AdminPage() {
   useEffect(() => {
     if (user && !user.is_admin) navigate("/");
     listWorlds().then(setWorlds);
+    loadUsers();
   }, [user, navigate]);
+
+  async function loadUsers() {
+    try {
+      const res = await api.get<AdminUser[]>("/admin/users");
+      setUsers(res.data);
+    } catch {
+      addLog("✗ Could not load users");
+    }
+  }
 
   function addLog(msg: string) {
     setLog((prev) => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev.slice(0, 49)]);
@@ -65,42 +88,131 @@ export function AdminPage() {
     }
   }
 
+  async function handleUserAction(userId: string, action: "promote" | "demote" | "deactivate" | "activate") {
+    try {
+      await api.patch(`/admin/users/${userId}/${action}`);
+      addLog(`✓ User ${action}d`);
+      await loadUsers();
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { detail?: string } } };
+      addLog(`✗ ${action}: ${err?.response?.data?.detail ?? "error"}`);
+    }
+  }
+
   return (
     <div style={styles.page}>
       <header style={styles.header}>
         <button style={styles.back} onClick={() => navigate("/")}>← Worlds</button>
         <h2 style={styles.title}>Admin Panel</h2>
-        <button style={styles.createBtn} onClick={() => setCreating(true)}>+ New World</button>
+        <div style={styles.tabs}>
+          <button style={tab === "worlds" ? styles.tabActive : styles.tab} onClick={() => setTab("worlds")}>
+            Worlds
+          </button>
+          <button style={tab === "users" ? styles.tabActive : styles.tab} onClick={() => setTab("users")}>
+            Users ({users.length})
+          </button>
+        </div>
+        {tab === "worlds" && (
+          <button style={styles.createBtn} onClick={() => setCreating(true)}>+ New World</button>
+        )}
       </header>
 
       <div style={styles.body}>
-        {/* World list */}
         <div style={styles.main}>
-          <h3 style={styles.sectionTitle}>Worlds</h3>
-          {worlds.map((w) => (
-            <div key={w.id} style={styles.card}>
-              <div style={styles.cardHeader}>
-                <span style={styles.worldName}>{w.name}</span>
-                <span style={styles.meta}>Turn {w.turn} · {w.mapx}×{w.mapy}</span>
-                {w.is_maintenance && <span style={styles.maint}>MAINT</span>}
-              </div>
-              <div style={styles.cardActions}>
-                <button style={styles.btn} onClick={() => handleInitWorld(w.id, w.name)}>
-                  Initialize Map
-                </button>
-                <button style={styles.btnDanger} onClick={() => handleProcessTurn(w.id, w.name)}>
-                  Process Turn
-                </button>
-                <input
-                  style={styles.seedInput}
-                  placeholder="seed (opt)"
-                  value={seed}
-                  onChange={(e) => setSeed(e.target.value)}
-                />
-              </div>
-            </div>
-          ))}
-          {worlds.length === 0 && <p style={{ color: "#555" }}>No worlds yet</p>}
+          {/* Worlds tab */}
+          {tab === "worlds" && (
+            <>
+              <h3 style={styles.sectionTitle}>Worlds</h3>
+              {worlds.map((w) => (
+                <div key={w.id} style={styles.card}>
+                  <div style={styles.cardHeader}>
+                    <span style={styles.worldName}>{w.name}</span>
+                    <span style={styles.meta}>Turn {w.turn} · {w.mapx}×{w.mapy}</span>
+                    {w.is_maintenance && <span style={styles.maint}>MAINT</span>}
+                  </div>
+                  <div style={styles.cardActions}>
+                    <button style={styles.btn} onClick={() => handleInitWorld(w.id, w.name)}>
+                      Initialize Map
+                    </button>
+                    <button style={styles.btnDanger} onClick={() => handleProcessTurn(w.id, w.name)}>
+                      Process Turn
+                    </button>
+                    <input
+                      style={styles.seedInput}
+                      placeholder="seed (opt)"
+                      value={seed}
+                      onChange={(e) => setSeed(e.target.value)}
+                    />
+                  </div>
+                </div>
+              ))}
+              {worlds.length === 0 && <p style={{ color: "#555" }}>No worlds yet</p>}
+            </>
+          )}
+
+          {/* Users tab */}
+          {tab === "users" && (
+            <>
+              <h3 style={styles.sectionTitle}>User Accounts</h3>
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th style={styles.th}>Username</th>
+                    <th style={styles.th}>Email</th>
+                    <th style={styles.th}>Status</th>
+                    <th style={styles.th}>Role</th>
+                    <th style={styles.th}>Joined</th>
+                    <th style={styles.th}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr key={u.id} style={{ opacity: u.is_active ? 1 : 0.5 }}>
+                      <td style={styles.td}>{u.username}</td>
+                      <td style={styles.td}>{u.email}</td>
+                      <td style={styles.td}>
+                        <span style={u.is_active ? styles.badgeGreen : styles.badgeRed}>
+                          {u.is_active ? "Active" : "Banned"}
+                        </span>
+                      </td>
+                      <td style={styles.td}>
+                        <span style={u.is_admin ? styles.badgeGold : styles.badgeGray}>
+                          {u.is_admin ? "Admin" : "Player"}
+                        </span>
+                      </td>
+                      <td style={styles.td}>{new Date(u.created_at).toLocaleDateString()}</td>
+                      <td style={styles.td}>
+                        <div style={{ display: "flex", gap: 4 }}>
+                          {!u.is_admin && u.id !== user?.id && (
+                            <button style={styles.btnSmall} onClick={() => handleUserAction(u.id, "promote")}>
+                              Promote
+                            </button>
+                          )}
+                          {u.is_admin && u.id !== user?.id && (
+                            <button style={styles.btnSmallWarn} onClick={() => handleUserAction(u.id, "demote")}>
+                              Demote
+                            </button>
+                          )}
+                          {u.is_active && u.id !== user?.id && (
+                            <button style={styles.btnSmallDanger} onClick={() => handleUserAction(u.id, "deactivate")}>
+                              Ban
+                            </button>
+                          )}
+                          {!u.is_active && (
+                            <button style={styles.btnSmall} onClick={() => handleUserAction(u.id, "activate")}>
+                              Unban
+                            </button>
+                          )}
+                          {u.id === user?.id && <span style={{ color: "#555", fontSize: 11 }}>(you)</span>}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {users.length === 0 && <p style={{ color: "#555" }}>No users registered yet</p>}
+            </>
+          )}
         </div>
 
         {/* Log */}
@@ -143,10 +255,19 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", gap: 16,
     padding: "10px 20px", background: "#1c1c2e", borderBottom: "1px solid #333",
   },
-  title: { color: "#fff", margin: 0, flex: 1, fontSize: 18 },
+  title: { color: "#fff", margin: 0, fontSize: 18 },
   back: {
     background: "none", border: "1px solid #444", borderRadius: 4,
     color: "#aaa", cursor: "pointer", fontSize: 12, padding: "4px 8px",
+  },
+  tabs: { display: "flex", gap: 4, flex: 1 },
+  tab: {
+    padding: "5px 14px", background: "none", border: "1px solid #444",
+    borderRadius: 4, color: "#888", cursor: "pointer", fontSize: 13,
+  },
+  tabActive: {
+    padding: "5px 14px", background: "#2c3e50", border: "1px solid #4a6fa5",
+    borderRadius: 4, color: "#fff", cursor: "pointer", fontSize: 13,
   },
   createBtn: {
     padding: "6px 14px", background: "#27ae60", border: "none",
@@ -182,6 +303,40 @@ const styles: Record<string, React.CSSProperties> = {
   seedInput: {
     padding: "4px 8px", background: "#12121f", border: "1px solid #444",
     borderRadius: 4, color: "#fff", fontSize: 12, width: 80,
+  },
+  table: { width: "100%", borderCollapse: "collapse", fontSize: 13 },
+  th: {
+    color: "#888", textAlign: "left", padding: "6px 10px",
+    borderBottom: "1px solid #333", fontWeight: 500,
+  },
+  td: { color: "#ccc", padding: "8px 10px", borderBottom: "1px solid #1e1e30" },
+  badgeGreen: {
+    background: "#1a4a2a", color: "#5f9", fontSize: 11,
+    padding: "2px 7px", borderRadius: 10,
+  },
+  badgeRed: {
+    background: "#4a1a1a", color: "#f55", fontSize: 11,
+    padding: "2px 7px", borderRadius: 10,
+  },
+  badgeGold: {
+    background: "#4a3800", color: "#fc0", fontSize: 11,
+    padding: "2px 7px", borderRadius: 10,
+  },
+  badgeGray: {
+    background: "#222", color: "#888", fontSize: 11,
+    padding: "2px 7px", borderRadius: 10,
+  },
+  btnSmall: {
+    padding: "2px 8px", background: "#2c3e50", border: "1px solid #445",
+    borderRadius: 3, color: "#adf", cursor: "pointer", fontSize: 11,
+  },
+  btnSmallWarn: {
+    padding: "2px 8px", background: "#3a3000", border: "1px solid #665500",
+    borderRadius: 3, color: "#fc0", cursor: "pointer", fontSize: 11,
+  },
+  btnSmallDanger: {
+    padding: "2px 8px", background: "#3a1010", border: "1px solid #661111",
+    borderRadius: 3, color: "#f88", cursor: "pointer", fontSize: 11,
   },
   logBody: { flex: 1, overflowY: "auto", padding: "0 12px 12px" },
   logLine: { color: "#7fc", fontSize: 11, margin: "2px 0", fontFamily: "monospace" },
