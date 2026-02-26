@@ -3,14 +3,14 @@ World model — a single game instance.
 
 Derived from the C struct s_world in gpl-release/Include/dataX.h.
 The many char/short config fields are flattened into typed columns for
-queryability; game-balance tweaks that are rarely queried live in JSONB.
+queryability; game-balance tweaks that are rarely queried live in JSON.
 """
 
 import uuid
 from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, DateTime, Integer, SmallInteger, String, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import JSON, BigInteger, Boolean, DateTime, Integer, SmallInteger, String, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -61,9 +61,9 @@ class World(Base):
     merc_attack_bonus: Mapped[int] = mapped_column(SmallInteger, default=0)
     merc_defense_bonus: Mapped[int] = mapped_column(SmallInteger, default=0)
 
-    # Gameplay configuration (stored as JSONB for flexibility)
+    # Gameplay configuration (stored as JSON for flexibility)
     # Keys mirror the C world struct: pwater, pmount, num_dice, avg_damage, etc.
-    config: Mapped[dict] = mapped_column(JSONB, default=lambda: _default_config())
+    config: Mapped[dict] = mapped_column(JSON, default=lambda: _default_config())
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

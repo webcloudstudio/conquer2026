@@ -5,12 +5,12 @@ New system designed for the reboot. Events affect one or more sectors,
 persist for multiple turns, and can chain into follow-on events.
 """
 
-import uuid
 import enum
+import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, SmallInteger, String, func
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import JSON, DateTime, ForeignKey, Integer, SmallInteger, String, func
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -78,14 +78,14 @@ class WorldEvent(Base):
     category: Mapped[str] = mapped_column(String(20), nullable=False)
 
     # List of [x, y] pairs this event affects
-    affected_sectors: Mapped[list] = mapped_column(JSONB, default=list)
+    affected_sectors: Mapped[list] = mapped_column(JSON, default=list)
 
     turns_remaining: Mapped[int] = mapped_column(SmallInteger, default=1)
     severity: Mapped[int] = mapped_column(Integer, default=1)  # 1=mild, 5=catastrophic
     display_icon: Mapped[str] = mapped_column(String(50), default="")
 
     # Extra data specific to the event type (e.g., mercenary army strength)
-    metadata: Mapped[dict] = mapped_column(JSONB, default=dict)
+    event_data: Mapped[dict] = mapped_column(JSON, default=dict)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

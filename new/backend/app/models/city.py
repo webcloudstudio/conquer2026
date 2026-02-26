@@ -8,8 +8,8 @@ structure that carries inventory, distribution rules, and fortification data.
 
 import uuid
 
-from sqlalchemy import BigInteger, Boolean, ForeignKey, SmallInteger, String
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import JSON, BigInteger, Boolean, ForeignKey, SmallInteger, String
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -59,8 +59,8 @@ class City(Base):
     min_food: Mapped[int] = mapped_column(BigInteger, default=0)
     min_wood: Mapped[int] = mapped_column(BigInteger, default=0)
 
-    # Auto-distribution flags (JSONB: list of 5 ints, one per material)
-    auto_flags: Mapped[list] = mapped_column(JSONB, default=lambda: [0, 0, 0, 0, 0])
+    # Auto-distribution flags (JSON: list of 5 ints, one per material)
+    auto_flags: Mapped[list] = mapped_column(JSON, default=lambda: [0, 0, 0, 0, 0])
 
     # Navy/caravan command flag (bitmask)
     cmd_flag: Mapped[int] = mapped_column(BigInteger, default=0)

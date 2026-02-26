@@ -5,10 +5,9 @@ Uses an in-memory SQLite database for unit/integration tests so no
 running PostgreSQL instance is required in CI.
 """
 
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.database import get_db
 from app.main import app

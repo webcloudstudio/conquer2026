@@ -18,7 +18,9 @@ router = APIRouter(prefix="/worlds/{world_id}/nations", tags=["nations"])
 
 
 @router.get("/", response_model=list[NationOut])
-async def list_nations(world_id: uuid.UUID, db: Annotated[AsyncSession, Depends(get_db)]) -> list[Nation]:
+async def list_nations(
+    world_id: uuid.UUID, db: Annotated[AsyncSession, Depends(get_db)]
+) -> list[Nation]:
     result = await db.execute(
         select(Nation).where(Nation.world_id == world_id, Nation.is_active == True)  # noqa: E712
     )
@@ -49,7 +51,9 @@ async def join_world(
 ) -> Nation:
     """Register the current user as a new nation in this world."""
     # Verify world exists and is active
-    world_result = await db.execute(select(World).where(World.id == world_id, World.is_active == True))  # noqa: E712
+    world_result = await db.execute(
+        select(World).where(World.id == world_id, World.is_active == True)  # noqa: E712
+    )
     world = world_result.scalar_one_or_none()
     if not world:
         raise HTTPException(status_code=404, detail="World not found or not active")
