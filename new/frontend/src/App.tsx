@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { WorldListPage } from "./pages/WorldListPage";
@@ -24,12 +25,17 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/" element={<RequireAuth><WorldListPage /></RequireAuth>} />
+
+        {/* Authenticated routes */}
+        <Route path="/worlds" element={<RequireAuth><WorldListPage /></RequireAuth>} />
         <Route path="/game/:worldId" element={<RequireAuth><GamePage /></RequireAuth>} />
         <Route path="/game/:worldId/inbox" element={<RequireAuth><InboxPage /></RequireAuth>} />
         <Route path="/admin" element={<RequireAuth><AdminPage /></RequireAuth>} />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

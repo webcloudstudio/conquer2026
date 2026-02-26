@@ -102,7 +102,8 @@ export function AdminPage() {
   return (
     <div style={styles.page}>
       <header style={styles.header}>
-        <button style={styles.back} onClick={() => navigate("/")}>← Worlds</button>
+        <button style={styles.back} onClick={() => navigate("/")}>← Home</button>
+        <button style={{ ...styles.back, marginLeft: 4 }} onClick={() => navigate("/worlds")}>Worlds</button>
         <h2 style={styles.title}>Admin Panel</h2>
         <div style={styles.tabs}>
           <button style={tab === "worlds" ? styles.tabActive : styles.tab} onClick={() => setTab("worlds")}>

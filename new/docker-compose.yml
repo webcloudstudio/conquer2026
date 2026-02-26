@@ -68,7 +68,9 @@ services:
     command: celery -A app.tasks.celery_app:celery_app beat --loglevel=info
 
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     ports:
       - "5174:80"
     depends_on:

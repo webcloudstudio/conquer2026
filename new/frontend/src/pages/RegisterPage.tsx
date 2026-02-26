@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { register, login } from "../api/auth";
 import { useAuthStore } from "../store/auth";
 
@@ -11,6 +11,8 @@ export function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const { setToken, loadMe } = useAuthStore();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const next = searchParams.get("next") || "/worlds";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -21,7 +23,7 @@ export function RegisterPage() {
       const token = await login(username, password);
       setToken(token);
       await loadMe();
-      navigate("/");
+      navigate(next);
     } catch (err: unknown) {
       const e = err as { response?: { data?: { detail?: string } } };
       setError(e?.response?.data?.detail || "Registration failed");
@@ -54,7 +56,10 @@ export function RegisterPage() {
           </button>
         </form>
         <p style={styles.link}>
-          Already have an account? <Link to="/login" style={{ color: "#7fc" }}>Sign in</Link>
+          Already have an account? <Link to={`/login?next=${encodeURIComponent(next)}`} style={{ color: "#7fc" }}>Sign in</Link>
+        </p>
+        <p style={styles.link}>
+          <Link to="/" style={{ color: "#555" }}>← Back to home</Link>
         </p>
       </div>
     </div>

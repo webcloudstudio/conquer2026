@@ -21,13 +21,14 @@ export function WorldListPage() {
   return (
     <div style={styles.page}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Conquer v5</h1>
+        <button style={styles.homeBtn} onClick={() => navigate("/")}>← Home</button>
+        <h1 style={styles.title}>Open Games</h1>
         <div style={styles.user}>
           <span style={{ color: "#aaa", fontSize: 13 }}>{user?.username}</span>
           {user?.is_admin && (
             <button style={styles.logoutBtn} onClick={() => navigate("/admin")}>Admin</button>
           )}
-          <button style={styles.logoutBtn} onClick={logout}>Logout</button>
+          <button style={styles.logoutBtn} onClick={logout}>Sign Out</button>
         </div>
       </header>
 
@@ -68,6 +69,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
   title: { color: "#ffd700", margin: 0, fontSize: 22 },
   user: { display: "flex", alignItems: "center", gap: 12 },
+  homeBtn: {
+    padding: "4px 10px", background: "none", border: "1px solid #444",
+    borderRadius: 4, color: "#666", cursor: "pointer", fontSize: 12,
+  },
   logoutBtn: {
     padding: "4px 12px", background: "none", border: "1px solid #555",
     borderRadius: 4, color: "#aaa", cursor: "pointer", fontSize: 12,
