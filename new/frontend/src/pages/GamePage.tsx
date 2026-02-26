@@ -12,7 +12,7 @@ import { listSectors, listArmies, listMyArmies, listNations, getWorld } from "..
 import type { Army, Nation, Sector, World } from "../types";
 import { useAuthStore } from "../store/auth";
 
-type Tab = "armies" | "messages" | "nations";
+type Tab = "armies" | "nations";
 
 export function GamePage() {
   const { worldId } = useParams<{ worldId: string }>();
@@ -77,7 +77,7 @@ export function GamePage() {
         <button style={styles.backBtn} onClick={() => navigate("/")}>← Worlds</button>
         <span style={styles.worldName}>{world?.name ?? "..."}</span>
         <div style={styles.tabs}>
-          {(["armies", "messages", "nations"] as Tab[]).map((t) => (
+          {(["armies", "nations"] as Tab[]).map((t) => (
             <button
               key={t}
               style={{ ...styles.tabBtn, ...(tab === t ? styles.tabActive : {}) }}
@@ -86,6 +86,9 @@ export function GamePage() {
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
+          <button style={styles.tabBtn} onClick={() => navigate(`/game/${worldId}/inbox`)}>
+            Inbox
+          </button>
         </div>
       </header>
 
@@ -111,11 +114,6 @@ export function GamePage() {
                   <span style={{ color: "#ffd700", fontSize: 11 }}>VP: {n.victory_points}</span>
                 </div>
               ))}
-            </div>
-          )}
-          {tab === "messages" && (
-            <div style={{ padding: 12, color: "#888", fontSize: 13 }}>
-              Open inbox from the messages page.
             </div>
           )}
         </div>

@@ -24,6 +24,9 @@ export function WorldListPage() {
         <h1 style={styles.title}>Conquer v5</h1>
         <div style={styles.user}>
           <span style={{ color: "#aaa", fontSize: 13 }}>{user?.username}</span>
+          {user?.is_admin && (
+            <button style={styles.logoutBtn} onClick={() => navigate("/admin")}>Admin</button>
+          )}
           <button style={styles.logoutBtn} onClick={logout}>Logout</button>
         </div>
       </header>
