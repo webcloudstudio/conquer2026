@@ -38,9 +38,7 @@ export function AppShell() {
           </button>
           {tab("Worlds List", "/worlds")}
           {tab("Manage Worlds", "/manage")}
-          <button style={s.tab} onClick={() => window.open("/docs/index.html", "_blank")}>
-            Documentation
-          </button>
+          {tab("Documentation", "/", true)}
         </nav>
         <div style={s.right}>
           {user && <span style={s.username}>{user.username}</span>}
