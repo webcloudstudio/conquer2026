@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameplay Guide — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="gameplay.html" class="active">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html">Economy &amp; Resources</a></li>
+    <li><a href="military.html">Military &amp; Combat</a></li>
+    <li><a href="magic.html">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html">Admin Guide</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>Gameplay Guide</h1>
+
+  <h2>The Turn Cycle</h2>
+  <p>
+    Conquer is <em>turn-based</em>. Between turns, players submit orders — move armies,
+    designate sectors, send messages, set diplomacy. When the turn processes, all orders
+    execute simultaneously and the world advances.
+  </p>
+
+  <ol>
+    <li><strong>Turn opens</strong> — you receive a news report of what happened last turn</li>
+    <li><strong>Review your nation</strong> — check resources, armies, territories</li>
+    <li><strong>Submit orders</strong> — moves, designations, diplomacy (any time before turn end)</li>
+    <li><strong>Turn processes</strong> — engine runs all orders, economy, combat, events</li>
+    <li><strong>Repeat</strong></li>
+  </ol>
+
+  <div class="callout">
+    You can change or cancel queued orders any time before the turn processes.
+    Only the last order for each unit takes effect.
+  </div>
+
+  <h2>The Hex Map</h2>
+  <p>
+    The world is a hex grid. Each hex (sector) has terrain that determines what it
+    can produce. You begin with a capital sector and a small starting army.
+  </p>
+
+  <h3>Reading the Map</h3>
+  <table>
+    <tr><th>Colour</th><th>Terrain</th><th>Notes</th></tr>
+    <tr><td style="background:#4a90d9;width:40px"></td><td>Water</td><td>Impassable by land armies</td></tr>
+    <tr><td style="background:#a8c87a"></td><td>Lowland</td><td>Best farming terrain</td></tr>
+    <tr><td style="background:#8db865"></td><td>Plains</td><td>Good farming and movement</td></tr>
+    <tr><td style="background:#6e9e50"></td><td>Hills</td><td>Good mining potential</td></tr>
+    <tr><td style="background:#bfa878"></td><td>Highland</td><td>Defensible, mineral rich</td></tr>
+    <tr><td style="background:#ccc"></td><td>Mountain</td><td>Slow movement, rich minerals</td></tr>
+  </table>
+
+  <h3>Map Icons</h3>
+  <ul>
+    <li>🔴 Red dot — an army is present in that sector</li>
+    <li>★ Gold star — a capital city</li>
+    <li>Gold border — sector owned by a nation</li>
+    <li>White border — currently selected sector</li>
+  </ul>
+
+  <h2>Territories</h2>
+  <p>
+    You own a sector when your army occupies it and no defenders remain. Owned sectors
+    produce resources each turn based on their designation.
+  </p>
+  <p>
+    Your <strong>capital</strong> is set when you join a world. If your capital is captured,
+    morale drops severely. If you have no sectors remaining, your nation is eliminated.
+  </p>
+
+  <h2>Sector Designations</h2>
+  <p>
+    Designating a sector tells workers what to produce. Designations are queued as orders
+    and take effect next turn. Click any sector you own and choose from the designation panel.
+  </p>
+  <table>
+    <tr><th>Designation</th><th>Primary Output</th><th>Best Terrain</th></tr>
+    <tr><td>Farm</td><td>Food</td><td>Lowland, plains</td></tr>
+    <tr><td>Mine</td><td>Metals, jewels</td><td>Hills, mountain</td></tr>
+    <tr><td>Forest</td><td>Wood</td><td>Forested sectors</td></tr>
+    <tr><td>Town / City</td><td>Talons (tax)</td><td>Any land</td></tr>
+    <tr><td>Fortress</td><td>Defence bonus</td><td>Any land (best on hills)</td></tr>
+    <tr><td>Shrine</td><td>Magic power</td><td>Any land</td></tr>
+    <tr><td>Port / Shipyard</td><td>Naval units</td><td>Coastal</td></tr>
+    <tr><td>Market</td><td>Trade bonus</td><td>Any land</td></tr>
+    <tr><td>University</td><td>Tech / spell research</td><td>Any land</td></tr>
+  </table>
+
+  <h2>Turn Execution Order</h2>
+  <p>Each turn processes in this fixed order (same as the original C <code>executeX.c</code>):</p>
+  <ol>
+    <li>Process player commands (moves, attacks, designations, diplomacy)</li>
+    <li>Sector production and consumption</li>
+    <li>Army movement and combat</li>
+    <li>Magic regeneration</li>
+    <li>World events</li>
+    <li>Victory point calculation</li>
+  </ol>
+
+  <h2>Victory Conditions</h2>
+  <p>
+    Each player class has a different way to win. Victory points (VP) accumulate each turn
+    and are visible to all players. The game ends when a player reaches the configured VP
+    threshold, or after the maximum number of turns, whichever comes first.
+  </p>
+  <p>
+    A traditional "last nation standing" mode is also available as a game setting.
+  </p>
+  <p>
+    See <a href="classes.html">Player Classes</a> for each class's VP formula.
+  </p>
+
+  <h2>First Turn Priorities</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Economy</h3>
+      <p>Designate farms on lowland sectors to build food reserves. Food is needed to sustain armies.</p>
+    </div>
+    <div class="card">
+      <h3>Expansion</h3>
+      <p>Move your starting army to claim unclaimed land. Early territory is easier to take than contested.</p>
+    </div>
+    <div class="card">
+      <h3>Defence</h3>
+      <p>Keep at least one army near your capital. NPC nations will probe your borders early.</p>
+    </div>
+    <div class="card">
+      <h3>Diplomacy</h3>
+      <p>Message other human players. Early alliances can give a significant economic advantage.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

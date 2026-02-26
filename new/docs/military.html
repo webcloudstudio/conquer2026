@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Military &amp; Combat — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="gameplay.html">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html">Economy &amp; Resources</a></li>
+    <li><a href="military.html" class="active">Military &amp; Combat</a></li>
+    <li><a href="magic.html">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html">Admin Guide</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>Military &amp; Combat</h1>
+
+  <h2>Armies</h2>
+  <p>Each army has:</p>
+  <table>
+    <tr><th>Attribute</th><th>Description</th></tr>
+    <tr><td>Strength</td><td>Number of troops (0 = disbanded)</td></tr>
+    <tr><td>Efficiency</td><td>Combat effectiveness % (0–100)</td></tr>
+    <tr><td>Movement</td><td>Hex sectors per turn</td></tr>
+    <tr><td>Supply</td><td>Turns of food carried; army starves when 0</td></tr>
+    <tr><td>Morale</td><td>Affects desertion rate and combat performance</td></tr>
+  </table>
+
+  <h2>Movement</h2>
+  <p>
+    Armies move up to their movement rating in hex distance per turn.
+    Select an army in the left panel, then click a destination hex and submit a Move order.
+  </p>
+  <ul>
+    <li>Movement is blocked by water sectors</li>
+    <li>Mountains cost extra movement points</li>
+    <li>Pathfinders ignore terrain movement penalties</li>
+    <li>You can see how far a move will take you — moves beyond the army's range are rejected</li>
+  </ul>
+
+  <h2>Combat Resolution</h2>
+  <p>
+    Combat is resolved when an ARMY_ATTACK order is processed. The engine uses a
+    probabilistic dice system (10 dice, scaled 0–100) for each round, with bonuses for:
+  </p>
+  <ul>
+    <li>Attacker: nation attack_bonus, army efficiency</li>
+    <li>Defender: nation defense_bonus, army efficiency, fortress level</li>
+  </ul>
+  <p>
+    Battles run up to 6 rounds. Each round deals damage based on the damage formula
+    (ported from the original <code>combatA.c</code>):
+  </p>
+  <pre><code>damage = (roll × strength × efficiency) / (100 × DAMAGE_LIMIT)</code></pre>
+
+  <h3>Fortress Bonus</h3>
+  <p>
+    Sectors designated as <strong>Fortress</strong> or <strong>Capital</strong> give
+    the defending army a fortification bonus. The fortress level is derived from the
+    sector's efficiency. Upgrading fortress efficiency (via construction) makes your
+    capital much harder to take.
+  </p>
+
+  <h3>Capture</h3>
+  <p>
+    If the attacker wins and all defending armies are defeated, the sector is captured:
+  </p>
+  <ul>
+    <li>Sector ownership transfers to the attacker's nation</li>
+    <li>Sector efficiency is reduced (damage from fighting)</li>
+    <li>The attacking army moves into the sector</li>
+  </ul>
+  <p>
+    Seizing an undefended sector (no enemy armies present) is always successful and
+    reduces efficiency less than a contested battle.
+  </p>
+
+  <h2>Army Orders</h2>
+  <table>
+    <tr><th>Order</th><th>Effect</th></tr>
+    <tr><td>Move</td><td>Move army to target hex (if within movement range)</td></tr>
+    <tr><td>Attack</td><td>Move to target hex and engage any defenders</td></tr>
+    <tr><td>Disband</td><td>Permanently remove the army (strength → 0)</td></tr>
+  </table>
+
+  <div class="callout warning">
+    Orders are queued and execute at turn processing time — you cannot react to
+    other players' moves within the same turn.
+  </div>
+
+  <h2>Morale</h2>
+  <p>
+    Morale (0–100) affects army desertion and combat effectiveness. Morale drops when:
+  </p>
+  <ul>
+    <li>Tax rate is high</li>
+    <li>Food is scarce (starvation)</li>
+    <li>Battles are lost</li>
+    <li>World events (harsh winter, curse, etc.)</li>
+  </ul>
+  <p>Morale recovers slowly each turn when conditions improve.</p>
+  <p>Nations with low morale may suffer <strong>peasant uprisings</strong> (world event)
+  that temporarily remove sector control.</p>
+
+  <h2>Starvation</h2>
+  <p>
+    If your food reserve reaches 0 and armies cannot be supplied, they begin losing
+    strength (starvation casualties) each turn. Build farms before raising large armies.
+  </p>
+</main>
+</body>
+</html>

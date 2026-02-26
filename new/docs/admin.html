@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Guide — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="gameplay.html">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html">Economy &amp; Resources</a></li>
+    <li><a href="military.html">Military &amp; Combat</a></li>
+    <li><a href="magic.html">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html" class="active">Admin Guide</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>Admin Guide</h1>
+
+  <h2>First Admin User</h2>
+  <p>
+    The first registered user should be promoted to admin. Using the database:
+  </p>
+  <pre><code>docker compose exec db psql -U conquer
+UPDATE users SET is_admin = true WHERE username = 'yourname';
+\q</code></pre>
+  <p>
+    Once logged in with an admin account, an <strong>Admin</strong> button appears in
+    the top-right of the game browser.
+  </p>
+
+  <h2>Admin Panel</h2>
+  <p>The admin panel (at <code>/admin</code>) provides:</p>
+  <ul>
+    <li><strong>Create World</strong> — name a new game instance</li>
+    <li><strong>Initialize Map</strong> — generate the hex map and NPC nations for a world</li>
+    <li><strong>Process Turn</strong> — manually trigger one turn for a world</li>
+    <li><strong>Activity Log</strong> — real-time feedback on admin actions</li>
+  </ul>
+
+  <h2>Creating a New Game</h2>
+  <ol>
+    <li>Click <strong>+ New World</strong> and enter a name</li>
+    <li>Click <strong>Initialize Map</strong> on the new world (optionally set a seed for reproducibility)</li>
+    <li>The map and 8 NPC nations are generated. Players can now join.</li>
+    <li>Once enough players have joined, turns begin processing automatically every 6 hours
+        (or trigger manually)</li>
+  </ol>
+
+  <h2>Map Configuration</h2>
+  <table>
+    <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+    <tr><td>mapx</td><td>79</td><td>Map width in hex columns</td></tr>
+    <tr><td>mapy</td><td>49</td><td>Map height in hex rows</td></tr>
+    <tr><td>pwater</td><td>35</td><td>% of map that becomes ocean</td></tr>
+    <tr><td>pmount</td><td>20</td><td>% of land that becomes mountains</td></tr>
+    <tr><td>npc_count</td><td>8</td><td>Number of NPC nations to spawn</td></tr>
+    <tr><td>seed</td><td>random</td><td>Fixed seed for reproducible maps</td></tr>
+  </table>
+
+  <h2>REST API Admin Endpoints</h2>
+  <p>All admin endpoints require a valid JWT from an admin user (Bearer token).</p>
+  <table>
+    <tr><th>Endpoint</th><th>Method</th><th>Action</th></tr>
+    <tr><td><code>/admin/worlds/{id}/initialize</code></td><td>POST</td><td>Generate map + NPCs</td></tr>
+    <tr><td><code>/admin/worlds/{id}/process-turn</code></td><td>POST</td><td>Process one turn</td></tr>
+    <tr><td><code>/admin/worlds/{id}/maintenance</code></td><td>POST</td><td>Toggle maintenance mode</td></tr>
+    <tr><td><code>/worlds/</code></td><td>POST</td><td>Create a new world (admin only)</td></tr>
+  </table>
+
+  <h2>Maintenance Mode</h2>
+  <p>
+    Toggle maintenance mode to block player logins while you make administrative changes.
+    Active worlds in maintenance mode are skipped by the Celery turn scheduler.
+    Mirrors the original <code>conqrun -T</code> flag.
+  </p>
+
+  <h2>API Documentation</h2>
+  <p>
+    Full interactive API documentation is available at
+    <a href="http://localhost:8000/docs">http://localhost:8000/docs</a>
+    (Swagger UI) when the backend is running.
+  </p>
+
+  <h2>Celery Worker Management</h2>
+  <pre><code># View worker status
+docker compose exec worker celery -A app.tasks.celery_app:celery_app inspect active
+
+# View scheduled tasks
+docker compose exec beat celery -A app.tasks.celery_app:celery_app inspect scheduled
+
+# Process a specific world manually (from host)
+docker compose exec backend python3 -c "
+from app.tasks.turn_tasks import process_world_turn
+process_world_turn.delay('&lt;world-uuid&gt;')
+"</code></pre>
+
+  <h2>Backing Up Game Data</h2>
+  <pre><code># Dump the database
+docker compose exec db pg_dump -U conquer conquer &gt; backup.sql
+
+# Restore
+cat backup.sql | docker compose exec -T db psql -U conquer conquer</code></pre>
+</main>
+</body>
+</html>

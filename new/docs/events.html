@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Events — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="gameplay.html">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html">Economy &amp; Resources</a></li>
+    <li><a href="military.html">Military &amp; Combat</a></li>
+    <li><a href="magic.html">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html" class="active">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html">Admin Guide</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>World Events</h1>
+  <p>
+    Each turn, random events may fire and affect the world. Events are visible in the
+    World News broadcast and can persist multiple turns. Some events chain into others.
+  </p>
+
+  <h2>Weather Events</h2>
+  <table>
+    <tr><th>Event</th><th>Duration</th><th>Effect</th></tr>
+    <tr><td>❄️ Blizzard</td><td>2–4 turns</td><td>Sector efficiency −10%, army movement slowed</td></tr>
+    <tr><td>☀️ Drought</td><td>3–6 turns</td><td>Farm efficiency −15%; can chain to Famine</td></tr>
+    <tr><td>🌊 Flood</td><td>2–3 turns</td><td>Farm and granary efficiency −20%</td></tr>
+    <tr><td>🌿 Perfect Growing Season</td><td>1 turn</td><td>Farm food production +50% this turn</td></tr>
+    <tr><td>🌨️ Harsh Winter</td><td>3–5 turns</td><td>All nations −10 morale per turn</td></tr>
+  </table>
+
+  <h2>Geological Events</h2>
+  <table>
+    <tr><th>Event</th><th>Duration</th><th>Effect</th></tr>
+    <tr><td>💥 Earthquake</td><td>1–2 turns</td><td>Random sectors lose 10–30% efficiency</td></tr>
+    <tr><td>💰 Treasure Strike</td><td>1 turn</td><td>A random sector gains +3 minerals</td></tr>
+  </table>
+
+  <h2>Social Events</h2>
+  <table>
+    <tr><th>Event</th><th>Duration</th><th>Effect</th></tr>
+    <tr><td>💀 Plague</td><td>4–8 turns</td><td>Affected sectors lose 25% population per turn</td></tr>
+    <tr><td>⚔️ Peasant Uprising</td><td>2–3 turns</td><td>Sector efficiency −25%; can chain from Famine</td></tr>
+    <tr><td>🗡️ Mercenary Band Arrives</td><td>1 turn</td><td>Large army on map; hire at half cost</td></tr>
+    <tr><td>🛒 Trade Fair</td><td>2 turns</td><td>Caravans deliver double value</td></tr>
+  </table>
+
+  <h2>Magical Events</h2>
+  <table>
+    <tr><th>Event</th><th>Duration</th><th>Effect</th></tr>
+    <tr><td>✨ Ley Line Surge</td><td>1 turn</td><td>All nations +20 magic power</td></tr>
+    <tr><td>🏛️ Ancient Ruins Discovered</td><td>1 turn</td><td>A random artifact spawns on the map</td></tr>
+    <tr><td>🐉 Wandering Dragon</td><td>1–5 turns</td><td>Dragon raids nearby sectors; Monster Lords can tame</td></tr>
+    <tr><td>💀 Curse of the Ancients</td><td>3 turns</td><td>Random nation −20 morale</td></tr>
+    <tr><td>⛈️ Magical Storm</td><td>2–3 turns</td><td>All spells have 50% failure chance</td></tr>
+  </table>
+
+  <h2>Chained Events</h2>
+  <p>Some events trigger follow-on events:</p>
+  <table>
+    <tr><th>Trigger</th><th>→ Chains to</th><th>Chance</th></tr>
+    <tr><td>Drought (ends)</td><td>Famine</td><td>60%</td></tr>
+    <tr><td>Famine (ends)</td><td>Peasant Uprising</td><td>40%</td></tr>
+    <tr><td>Uprising (ends)</td><td>Desertion Wave</td><td>50%</td></tr>
+  </table>
+
+  <h2>Event Rate</h2>
+  <p>
+    The world admin can configure the event rate when creating a game. A rate of 1.0 is
+    normal; 0.0 disables all events; 2.0 doubles the frequency (chaotic games).
+  </p>
+
+  <div class="callout">
+    The <strong>Staff of Weather</strong> artifact makes the holder immune to all
+    weather-category events.
+  </div>
+</main>
+</body>
+</html>

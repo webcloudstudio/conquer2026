@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magic System — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="gameplay.html">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html">Economy &amp; Resources</a></li>
+    <li><a href="military.html">Military &amp; Combat</a></li>
+    <li><a href="magic.html" class="active">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html">Admin Guide</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>Magic System</h1>
+
+  <h2>The Three Powers</h2>
+  <p>
+    Magic in Conquer comes from three sources, each regenerating from different shrine types.
+  </p>
+  <table>
+    <tr><th>Power</th><th>Symbol</th><th>Governs</th><th>Regeneration</th></tr>
+    <tr><td><strong>Military Power</strong></td><td>🔴</td><td>Combat spells, army buffs</td><td>Shrines + national military strength</td></tr>
+    <tr><td><strong>Civilian Power</strong></td><td>🔵</td><td>Economic spells, growth</td><td>Shrines + city count</td></tr>
+    <tr><td><strong>Wizardry Power</strong></td><td>🟣</td><td>Advanced spells, divination</td><td>Shrines + wizard skill attribute</td></tr>
+  </table>
+
+  <p>
+    <strong>Theocrats</strong> regenerate 40% faster. Shrines owned double the regeneration
+    bonus. The Ley Line Surge world event temporarily doubles all power.
+  </p>
+
+  <h2>Casting Spells</h2>
+  <p>
+    Spells are issued as orders (like army moves) and execute at turn processing time.
+    Each spell has a power cost and a minimum wizard skill requirement.
+  </p>
+
+  <h2>The Ten Spells</h2>
+  <table>
+    <tr><th>#</th><th>Spell</th><th>Effect</th><th>Power Type</th><th>Cost</th></tr>
+    <tr><td>1</td><td>Bless Army</td><td>Target army +20% efficiency for 3 turns</td><td>Military</td><td>20</td></tr>
+    <tr><td>2</td><td>Curse Enemy</td><td>Target nation -15 morale for 2 turns</td><td>Military</td><td>30</td></tr>
+    <tr><td>3</td><td>Farsight</td><td>Reveal all sectors within range 5 of capital</td><td>Wizardry</td><td>15</td></tr>
+    <tr><td>4</td><td>Harvest Boon</td><td>All farms +25% production this turn</td><td>Civilian</td><td>25</td></tr>
+    <tr><td>5</td><td>Ward</td><td>Target fortress: next battle attacker roll -20%</td><td>Military</td><td>35</td></tr>
+    <tr><td>6</td><td>Trade Wind</td><td>All caravans +2 movement this turn</td><td>Civilian</td><td>20</td></tr>
+    <tr><td>7</td><td>Plague Bolt</td><td>Target sector loses 20% population</td><td>Wizardry</td><td>40</td></tr>
+    <tr><td>8</td><td>Power Surge</td><td>All power types +30 this turn</td><td>All</td><td>50</td></tr>
+    <tr><td>9</td><td>Summon Monster</td><td>Spawns a monster army near target sector</td><td>Wizardry</td><td>60</td></tr>
+    <tr><td>10</td><td>Armageddon</td><td>All enemy armies -50% strength (once per game)</td><td>All</td><td>200</td></tr>
+  </table>
+
+  <h2>Spell Requirements</h2>
+  <ul>
+    <li>You must have sufficient power of the required type</li>
+    <li>Your wizard skill attribute must meet the spell's minimum</li>
+    <li>Some spells require owning a shrine</li>
+    <li>During a Magical Storm event, all spells have a 50% chance to fail</li>
+  </ul>
+
+  <h2>Improving Magic</h2>
+  <ul>
+    <li>Build more <strong>Shrines</strong> — each owned shrine increases power regeneration</li>
+    <li>Raise wizard skill via the national attribute system</li>
+    <li>The <strong>Theocrat</strong> class is best suited to heavy magic use</li>
+    <li>The <strong>Tome of Power</strong> artifact gives +2 magic regeneration per turn</li>
+  </ul>
+</main>
+</body>
+</html>

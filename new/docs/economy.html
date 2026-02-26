@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economy &amp; Resources — Conquer v5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Conquer v5</div>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Running the Game</a></li>
+    <li><a href="gameplay.html">Gameplay Guide</a></li>
+    <li><a href="classes.html">Player Classes</a></li>
+    <li><a href="economy.html" class="active">Economy &amp; Resources</a></li>
+    <li><a href="military.html">Military &amp; Combat</a></li>
+    <li><a href="magic.html">Magic System</a></li>
+    <li><a href="diplomacy.html">Diplomacy</a></li>
+    <li><a href="events.html">World Events</a></li>
+    <li><a href="artifacts.html">Artifacts</a></li>
+    <li><a href="admin.html">Admin Guide</a></li>
+  </ul>
+</nav>
+<main>
+  <h1>Economy &amp; Resources</h1>
+
+  <h2>The Five Resources</h2>
+  <table>
+    <tr><th>Resource</th><th>Symbol</th><th>Primary Use</th><th>Production</th></tr>
+    <tr><td><strong>Talons</strong></td><td>🪙</td><td>Army pay, construction, trade</td><td>Tax from towns and cities</td></tr>
+    <tr><td><strong>Jewels</strong></td><td>💎</td><td>Magic spells, diplomacy gifts</td><td>Mining highland/mountain sectors</td></tr>
+    <tr><td><strong>Metals</strong></td><td>⚙️</td><td>Arms, fortifications, ships</td><td>Mining hills and mountains</td></tr>
+    <tr><td><strong>Food</strong></td><td>🌾</td><td>Army supply, population growth</td><td>Farming lowland and plain sectors</td></tr>
+    <tr><td><strong>Wood</strong></td><td>🪵</td><td>Construction, ships, fortifications</td><td>Forest sectors</td></tr>
+  </table>
+
+  <h2>Production Formula</h2>
+  <p>Each sector produces resources based on:</p>
+  <pre><code>output = terrain_value × working_population × efficiency / 100</code></pre>
+  <p>
+    <strong>Terrain value</strong> depends on altitude and vegetation type.
+    <strong>Efficiency</strong> starts at 60–80% and improves over time (or drops after combat).
+    <strong>Working population</strong> is the sector population minus army garrison needs.
+  </p>
+
+  <h3>Seasonal Modifiers</h3>
+  <p>
+    Production varies by season. Farms produce less in winter; mines are less affected.
+    World events (drought, blizzard, perfect harvest) can further modify production for a turn.
+  </p>
+
+  <h2>Army Upkeep</h2>
+  <p>Armies consume food each turn:</p>
+  <pre><code>food_consumed = army_strength × upkeep_rate / 1000</code></pre>
+  <p>
+    If your nation runs out of food, armies begin losing strength (starvation casualties).
+    Keep farms producing surplus food before building large armies.
+  </p>
+
+  <h2>Tax Rate</h2>
+  <p>
+    Your tax rate (0–100%) determines how much of the sector's potential talon income
+    is collected. Higher rates extract more talons but reduce morale. A rate of 50% is
+    typical. Rates above 70% risk peasant unrest.
+  </p>
+
+  <h2>Caravans</h2>
+  <p>
+    Caravans move goods between your sectors or to other nations for profit. A caravan
+    route between a mine and a city, for example, earns talons based on the distance
+    and the current trade good prices.
+  </p>
+  <ul>
+    <li>Caravans are vulnerable to attacks while moving through contested territory</li>
+    <li>Traders get +30% caravan capacity and +1 movement per turn</li>
+    <li>Trade Fairs (world event) double caravan value for one turn</li>
+  </ul>
+
+  <h2>Resource Tips</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Food First</h3>
+      <p>Build at least 2 farms before raising more than one army. Running out of food collapses your military.</p>
+    </div>
+    <div class="card">
+      <h3>Mine Early</h3>
+      <p>Metals are required for fortifications. Claim a mineral-rich highland sector early and designate it as a mine.</p>
+    </div>
+    <div class="card">
+      <h3>Tax Balance</h3>
+      <p>Keep tax rate at 40–60%. High taxes earn more now but erode morale, reducing army effectiveness.</p>
+    </div>
+    <div class="card">
+      <h3>Jewels for Magic</h3>
+      <p>Jewels are rare. Stockpile them if you plan to use magic — they're the primary cost of powerful spells.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>
