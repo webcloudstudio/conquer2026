@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help Files — Conquer Original Docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Original Docs (1987)</div>
+  <ul>
+    <li><a href="../index.html">← New Docs</a></li>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="beginnings.html">Beginners Guide</a></li>
+    <li><a href="nations.html">Races &amp; Classes</a></li>
+    <li><a href="sectors.html">Sectors</a></li>
+    <li><a href="warfare.html">Warfare</a></li>
+    <li><a href="movement.html">Movement</a></li>
+    <li><a href="powers.html">Magic Powers</a></li>
+    <li><a href="economics.html">Economics</a></li>
+    <li><a href="god-powers.html">God Mode</a></li>
+    <li><a href="functions.html">Command Reference</a></li>
+    <li><a href="display.html">Display Guide</a></li>
+    <li><a href="quickies.html">Charts &amp; Summaries</a></li>
+    <li><a href="helpfiles.html" class="active">Help Files</a></li>
+    <li><a href="customize.html">Customization</a></li>
+    <li><a href="xchanges.html">Communication</a></li>
+  </ul>
+</nav>
+<main>
+<h1>The Conquer Documentation Sections</h1>
+<h2>The Documentation System</h2>
+<p>
+As you might have noticed, Conquer is a rather complex game.  For this 
+reason, I hope to provide a thorough documentation system. 
+<p>
+One of the keys to making sure that the documentation is as accurate 
+as possible is the fact that I use the same source files to generate 
+both the online and hardcopy versions of the documentation.   This 
+assures that if I have gotten something wrong, I have at least been 
+consistent about it. 
+<p>
+For those who are curious, I write the documentation using the roff 
+typesetting package which is available on most Unix systems.  I 
+developed my own set of macros which allow me to create automatic 
+paging for both the troff (actually psroff) and the nroff output. 
+[Well, I did cheat a bit by filtering the nroff output a little, but 
+that was just to allow the output to work in my pager, so you can&#x27;t 
+hold it against me.]  I only use 3 fonts in the psroff mode: a fixed 
+font for the screen examples and two times roman fonts for the normal 
+text and titles.  My macros also have the nice feature of keeping 
+track of what will fit on a page, so that I can avoid having sections 
+of text cut in half. 
+<p>
+I am always open to suggestions for improvement, and that includes 
+suggestions for enhancing the documentation system, or just ways of 
+clarifying the text of the documentation itself.  So, if you have any 
+ideas you think I should hear about, concerning ANY aspect of the 
+game, feel free to get in touch with me. 
+Adam Bryant 
+adb@bu.edu 
+<h2>What is in each Help Section?</h2>
+<p>
+This section gives a quick summary of what each of the help sections 
+contain, so that you might be able to locate the information more 
+easily. 
+<dl>
+<dt>Helpfiles (&quot;Conquer Documentation Sections&quot;)</dt><dd>A description of what this part of the documentation is for is given within the section itself.</dd>
+<dt>Overview (&quot;A General View of Conquer&quot;)</dt><dd>Read this to get a general idea of what Conquer is about.</dd>
+<dt>Functions (&quot;The List of Commands&quot;)</dt><dd>The list of Conquer functions, function descriptions and default key bindings.</dd>
+<dt>Display (&quot;Conquer Data Display Routines&quot;)</dt><dd>A description of the information display system.</dd>
+<dt>Sectors (&quot;Sector Information&quot;)</dt><dd>Descriptions of designations, constructions, vegetations, elevations and raw materials.</dd>
+<dt>Nations (&quot;Racial Traits and Nation Roles&quot;)</dt><dd>Information about the different races and nation types.</dd>
+<dt>Economics (&quot;Economic Management&quot;)</dt><dd>A look at how the economic system of Conquer works.</dd>
+<dt>Movement (&quot;Unit Relocation&quot;)</dt><dd>Relocating units from sector [X1,Y1] to sector [X2,Y2] is an important aspect of the game, and this section helps you learn how to do just that.</dd>
+<dt>Warfare (&quot;Military Units and Combat&quot;)</dt><dd>How to destroy your opponents using military means, or at least keep from being destroyed yourself.</dd>
+<dt>Powers (&quot;Magic Powers&quot;)</dt><dd>Spell casting and magic powers play an important role in the realm of Conquer, and this documentation describes how such sorcery is done.</dd>
+<dt>Xchanges (&quot;Communication Between Players&quot;)</dt><dd>Sending messages from one nation to another is much easier electronically than via horseback.</dd>
+<dt>Beginnings (&quot;Beginners Hints&quot;)</dt><dd>For those just starting, this section provides tips and hints as to how to become a better player, or at least give enough clues to allow you to survive.</dd>
+<dt>God-Powers (&quot;Conquer God Mode&quot;)</dt><dd>A cookbook for world creation and a listing of commands for ruling the world.</dd>
+<dt>Customize (&quot;Conquer Customization Settings&quot;)</dt><dd>This help section describes how to customize the Conquer environment.  Rebind keys, create your own displays, and have Conquer store the changes.</dd>
+<dt>Quickies (&quot;Charts and Summaries&quot;)</dt><dd>A summary of the commands and concepts of Conquer which, printed, will make a nice addition to your desk reference.</dd>
+<dt>Version (&quot;Version Information&quot;)</dt><dd>Last, but not least, there is the credits.  This document will give a listing of people involved in the creation of Conquer and some of its history.</dd>
+</dl>
+<h2>What about those other things?</h2>
+<p>
+Now, if you were paying attention, as I am sure you were, you are 
+wondering why I left some of the on-line help entries out.  Well, 
+those help entries are used as part of the documentation, but are not 
+built from preset help files.  They are generated by Conquer based on 
+the data in the campaign so an accurate representation is possible. 
+<p>
+The &quot;Runtime&quot; documentation consists of: 
+<dl>
+<dt>Army Types</dt><dd>This entry will provide a quick summary of the ability of a specified type of army unit.  A good deal of information will be provided, including combat information and any special unit abilities. A summary of all of the units is also available by entering &quot;*&quot; as the unit type.</dd>
+<dt>Key Bindings</dt><dd>This selection provides an interactive way of querying what function is bound to a given keystroke.</dd>
+<dt>List of Commands</dt><dd>This option provides a listing of all of the global level functions as well as all key bindings which are associated with each function.</dd>
+<p class="indent">
+<p class="indent">
+<dt>Tradegoods</dt><dd>Tradegoods play an important role within Conquer, and as such also need some quick documentation.  Tradegoods are broken into fourteen separate classes, with each class producing a given effect. To get information on items within a class, or on the tradegood class itself, specify which class of tradegoods you are interested in. The tradegood classes are: None, Popularity, Communication, Fishing, Farming, Spoilrate, Lumber, Knowledge, Eatrate, Health, Terror, Magical, Metals, Jewels. The information provided is: class name, description of class, what affect a tradegood has on a sector, the list of tradegoods in the class.  Along with all of the tradegoods, the relative value of the tradegood, the chance of occurrence within that class, the major designation and sector population necessary to take advantage of the tradegood is given.</dd>
+</dl>
+<p>
+Well, that concludes my summary of the documentation, hopefully it has 
+helped you sort through all of this mess.  [Of course, if anyone but 
+me calls it a mess, they will have some explaining to do :-)] 
+</main>
+</body>
+</html>

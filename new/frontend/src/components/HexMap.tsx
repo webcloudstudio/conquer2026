@@ -5,7 +5,7 @@
  * Each hex is a flat-top hexagon drawn with a <polygon>.
  */
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { Army, Nation, Sector } from "../types";
 
 // Terrain colours (altitude + vegetation)
@@ -35,6 +35,26 @@ const DESIGNATION_COLOUR: Record<number, string> = {
 
 const HEX_SIZE = 20; // pixels, flat-top hex
 
+// Nation color palette — deterministic hash
+function nationColor(nationId: string): string {
+  const palette = [
+    "#58a6ff", "#3fb950", "#f78166", "#d2a8ff",
+    "#ffa657", "#79c0ff", "#56d364", "#ff7b72",
+  ];
+  let hash = 0;
+  for (let i = 0; i < nationId.length; i++) {
+    hash = (hash * 31 + nationId.charCodeAt(i)) & 0xffffffff;
+  }
+  return palette[Math.abs(hash) % palette.length];
+}
+
+function armyColor(army: Army, myNation: Nation | null, nations: Nation[]): string {
+  if (myNation && army.nation_id === myNation.id) return "#ffd700"; // player = gold
+  const nation = nations.find((n) => n.id === army.nation_id);
+  if (nation?.is_npc) return "#8b949e"; // NPC = gray
+  return "#f85149"; // enemy = red
+}
+
 function hexCorners(cx: number, cy: number, size: number): string {
   const pts: string[] = [];
   for (let i = 0; i < 6; i++) {
@@ -57,11 +77,17 @@ interface HexMapProps {
   sectors: Sector[];
   armies: Army[];
   nations: Nation[];
+  myNation: Nation | null;
   selectedHex: { x: number; y: number } | null;
+  movementRange: { x: number; y: number }[] | null;
+  centerHex: { x: number; y: number } | null;
   onSelectHex: (x: number, y: number, sector: Sector | null) => void;
 }
 
-export function HexMap({ sectors, armies, nations, selectedHex, onSelectHex }: HexMapProps) {
+export function HexMap({
+  sectors, armies, nations, myNation, selectedHex,
+  movementRange, centerHex, onSelectHex,
+}: HexMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [viewBox, setViewBox] = useState({ x: 0, y: 0, w: 1400, h: 900 });
   const [dragging, setDragging] = useState(false);
@@ -76,6 +102,22 @@ export function HexMap({ sectors, armies, nations, selectedHex, onSelectHex }: H
     if (!armyByHex.has(key)) armyByHex.set(key, []);
     armyByHex.get(key)!.push(a);
   }
+
+  // Movement range set for quick lookup
+  const rangeSet = new Set<string>(
+    (movementRange ?? []).map((h) => `${h.x},${h.y}`)
+  );
+
+  // Center map when centerHex changes
+  useEffect(() => {
+    if (!centerHex) return;
+    const [px, py] = hexToPixel(centerHex.x, centerHex.y, HEX_SIZE);
+    setViewBox((v) => ({
+      ...v,
+      x: px - v.w / 2,
+      y: py - v.h / 2,
+    }));
+  }, [centerHex]);
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     setDragging(true);
@@ -114,32 +156,66 @@ export function HexMap({ sectors, armies, nations, selectedHex, onSelectHex }: H
       onMouseLeave={onMouseUp}
       onWheel={onWheel}
     >
+      {/* Terrain + ownership layer */}
       {sectors.map((s) => {
         const [cx, cy] = hexToPixel(s.x, s.y, HEX_SIZE);
         const base = ALTITUDE_COLOUR[s.altitude] ?? "#888";
         const overlay = DESIGNATION_COLOUR[s.designation] ?? "";
         const isSelected = selectedHex?.x === s.x && selectedHex?.y === s.y;
-        const hasArmy = armyByHex.has(`${s.x},${s.y}`);
         const owner = s.owner_nation_id ? nationMap.get(s.owner_nation_id) : null;
+        const borderColor = isSelected
+          ? "#fff"
+          : owner
+          ? nationColor(owner.id)
+          : "#333";
 
         return (
           <g key={`${s.x},${s.y}`} onClick={() => onSelectHex(s.x, s.y, s)}>
-            {/* Base terrain hex */}
             <polygon
               points={hexCorners(cx, cy, HEX_SIZE - 1)}
               fill={overlay || base}
-              stroke={isSelected ? "#fff" : owner ? "#ffd700" : "#333"}
-              strokeWidth={isSelected ? 2 : owner ? 1 : 0.5}
+              stroke={borderColor}
+              strokeWidth={isSelected ? 2 : owner ? 1.5 : 0.5}
               opacity={0.9}
             />
-            {/* Army indicator */}
-            {hasArmy && (
-              <circle cx={cx} cy={cy} r={5} fill="#e74c3c" stroke="#fff" strokeWidth={1} />
-            )}
-            {/* Capital star */}
             {s.designation === 4 && (
               <text x={cx} y={cy + 5} textAnchor="middle" fontSize={12} fill="#ffd700">★</text>
             )}
+          </g>
+        );
+      })}
+
+      {/* Movement range overlay */}
+      {movementRange && movementRange.map((h) => {
+        const [cx, cy] = hexToPixel(h.x, h.y, HEX_SIZE);
+        return (
+          <polygon
+            key={`range-${h.x},${h.y}`}
+            points={hexCorners(cx, cy, HEX_SIZE - 1)}
+            fill="rgba(63,185,80,0.25)"
+            stroke="#3fb950"
+            strokeWidth={1}
+            style={{ pointerEvents: "none" }}
+          />
+        );
+      })}
+
+      {/* Army layer */}
+      {Array.from(armyByHex.entries()).map(([key, armyGroup]) => {
+        const first = armyGroup[0];
+        const [cx, cy] = hexToPixel(first.x, first.y, HEX_SIZE);
+        const color = armyColor(first, myNation, nations);
+        const ownerNation = nationMap.get(first.nation_id);
+        const totalStr = armyGroup.reduce((s, a) => s + a.strength, 0);
+        const label = ownerNation ? `${ownerNation.name} · Str:${totalStr}` : `Str:${totalStr}`;
+
+        return (
+          <g key={`army-${key}`}>
+            <circle cx={cx} cy={cy} r={5} fill={color} stroke="#fff" strokeWidth={1} />
+            {armyGroup.length > 1 && (
+              <text x={cx + 6} y={cy - 4} fontSize={8} fill="#fff">{armyGroup.length}</text>
+            )}
+            <title>{label}</title>
           </g>
         );
       })}

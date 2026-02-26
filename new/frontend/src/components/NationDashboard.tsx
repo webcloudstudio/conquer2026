@@ -12,17 +12,17 @@ interface Props {
 
 export function NationDashboard({ nation, worldTurn }: Props) {
   const resources = [
-    { icon: "🪙", label: "Talons", value: nation.talons },
-    { icon: "💎", label: "Jewels", value: nation.jewels },
-    { icon: "⚙️", label: "Metals", value: nation.metals },
-    { icon: "🌾", label: "Food", value: nation.food },
-    { icon: "🪵", label: "Wood", value: nation.wood },
+    { icon: "🪙", label: "Talons", value: nation.talons, produced: nation.talons_produced },
+    { icon: "💎", label: "Jewels", value: nation.jewels, produced: nation.jewels_produced },
+    { icon: "⚙️", label: "Metals", value: nation.metals, produced: nation.metals_produced },
+    { icon: "🌾", label: "Food", value: nation.food, produced: nation.food_produced },
+    { icon: "🪵", label: "Wood", value: nation.wood, produced: nation.wood_produced },
   ];
 
   const powers = [
-    { label: "Military", value: nation.power_fire, colour: "#e74c3c" },
-    { label: "Civilian", value: nation.power_water, colour: "#3498db" },
-    { label: "Wizardry", value: nation.power_earth, colour: "#9b59b6" },
+    { label: "🔥 Military", value: nation.power_fire, colour: "#e74c3c" },
+    { label: "💧 Civilian", value: nation.power_water, colour: "#3498db" },
+    { label: "🌍 Wizardry", value: nation.power_earth, colour: "#9b59b6" },
   ];
 
   return (
@@ -34,10 +34,15 @@ export function NationDashboard({ nation, worldTurn }: Props) {
       </div>
 
       {/* Resources */}
-      {resources.map(({ icon, label, value }) => (
+      {resources.map(({ icon, label, value, produced }) => (
         <div key={label} style={styles.res}>
           <span style={styles.icon}>{icon}</span>
-          <span style={styles.val}>{value.toLocaleString()}</span>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+            <span style={styles.val}>{value.toLocaleString()}</span>
+            {produced > 0 && (
+              <span style={{ color: "#3fb950", fontSize: 10 }}>+{produced.toLocaleString()}</span>
+            )}
+          </div>
           <span style={styles.lbl}>{label}</span>
         </div>
       ))}

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Reference — Conquer Original Docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Original Docs (1987)</div>
+  <ul>
+    <li><a href="../index.html">← New Docs</a></li>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="beginnings.html">Beginners Guide</a></li>
+    <li><a href="nations.html">Races &amp; Classes</a></li>
+    <li><a href="sectors.html">Sectors</a></li>
+    <li><a href="warfare.html">Warfare</a></li>
+    <li><a href="movement.html">Movement</a></li>
+    <li><a href="powers.html">Magic Powers</a></li>
+    <li><a href="economics.html">Economics</a></li>
+    <li><a href="god-powers.html">God Mode</a></li>
+    <li><a href="functions.html" class="active">Command Reference</a></li>
+    <li><a href="display.html">Display Guide</a></li>
+    <li><a href="quickies.html">Charts &amp; Summaries</a></li>
+    <li><a href="helpfiles.html">Help Files</a></li>
+    <li><a href="customize.html">Customization</a></li>
+    <li><a href="xchanges.html">Communication</a></li>
+  </ul>
+</nav>
+<main>
+<h1>The List of Commands</h1>
+<h2>The Functionality of Conquer</h2>
+<p>
+Almost all of the commands within Conquer have been given function 
+names.  These names may be used to reassign keybindings, adjusting the 
+feel of Conquer to fit other preferences.  In general, Conquer 
+bindings are based on emacs and/or vi keys, so most users will be able 
+to adjust quickly to the default keybindings. 
+<p>
+Conquer consists of a number of different keybinding maps, for a total 
+of seven different modes.  The &quot;global&quot; commands cover all of the top 
+level Conquer functions available while looking at the main map 
+window.  The &quot;move&quot; keymap handles all of the bindings during unit or 
+civilian relocation.  The &quot;magic&quot; commands deal with those functions 
+used while perusing or purchasing magical powers.  The &quot;xfer&quot; keymap 
+is for the screen where goods, units, and people are transfered 
+between two storage locations.  The &quot;reader&quot; keymap is for use in the 
+mail reader.  The &quot;mail&quot; keymap is for when a new mail message is 
+being written.  Finally, the &quot;info&quot; keymap is used for keybindings in 
+the nation information screen. 
+<p>
+Again, if any of the default key bindings are unsuitable, they may be 
+adjusted using the customization system built into Conquer. 
+<p class="see-also">See also: <a href="customize.html">Conquer Customization Settings</a></p>
+<p>
+At any time, help may be obtained using `?&#x27; (`ESC-?&#x27; if in the &quot;mail&quot; 
+editor).  This help listing will provide access to a listing of all of 
+the commands and keybindings in the current keymap. 
+<h2>The Global Function Keys</h2>
+<p>
+The &quot;global&quot; keymap provides the overall control for Conquer, allowing 
+players to access all of the other keymaps and functions.  The other 
+purpose of the &quot;global&quot; keymap is to select military units within the 
+current sector, or to move between the various sectors. 
+<p>
+The movement commands are available with both the top-level keymap and 
+the &quot;move&quot; keymap.  But, within the &quot;move&quot; keymap the scrolling 
+commands are not available. 
+<p>
+Selection of units is very important, since a unit will need to be 
+selected before orders may be given to it.  There are a number of 
+commands which handle this task. 
+<p>
+Finally, with the display and digestion of information being very 
+important in game play, there are numerous functions available to 
+select what sort of information is displayed on the screen.  Most of 
+this information is directly available at the &quot;global&quot; level, with 
+precise details being available in some of the other keymaps. 
+<h2>The Movement Commands</h2>
+<p>
+Of all of the commands available to the players of Conquer, those 
+which control the selection of the current sector will get the most 
+use, and as such, should be memorized first. 
+<p>
+By default, the VI keys (hjklyubn) are set to all of the motion 
+commands.  The upper case equivalents provide functions which scroll 
+the screen in the given direction.  Also, the numeric keypad is 
+available for those that wish to use that alternative.  For the 
+numeric keypad, you may use a period followed by the number to scroll 
+in the appropriate direction. 
+<p>
+The directions provided by the standard VI keys and numeric keypad is 
+shown using the following diagrams: 
+<pre class="screen">
+               `y&#x27; `k&#x27; `u&#x27;                     `7&#x27; `8&#x27; `9&#x27;
+                 \  |  /                         \  |  /   
+                  \ | /                           \ | /    
+              `h&#x27;--` &#x27;--`l&#x27;                   `4&#x27;--` &#x27;--`6&#x27;
+                  / | \                           / | \ 
+                 /  |  \                         /  |  \
+               `b&#x27; `j&#x27; `n&#x27;                     `1&#x27; `2&#x27; `3&#x27;
+          Upper Case to Scroll             Use &quot;.#&quot; to Scroll
+</pre>
+<p>
+The full names of the movement functions are of the form 
+&quot;go-direction&quot;, such as &quot;go-north&quot;, &quot;go-southwest&quot;.  The scrolling 
+functions are likewise, &quot;scroll-direction&quot;. 
+<p>
+Note that with a hexagonal map, the directions west and east are not 
+available during the movement mode, since there are only six compass 
+directions. 
+<h2>Display Commands</h2>
+<p>
+During the normal interface mode of Conquer, the map of the world, or 
+a portion of that map, is displayed to the player.  For each sector, 
+there is a good deal of information which may be obtained.  In order 
+to quickly digest the large amount of data within the world, the 
+global view of the map can be changed to show different information to 
+the user.  The &quot;display&quot; commands provide the method for making such 
+changes.  The commands, with their default bindings within 
+parenthesis, are as follows: 
+<dl>
+<dt>adjust-display (`d&#x27;)</dt><dd>Select which display method is used to show the information on the screen.</dd>
+<dt>customize-display (`D&#x27;)</dt><dd>Create new display modes or modify the existing display modes to your taste.</dd>
+<dt>adjust-view (`^D&#x27;)</dt><dd>Change the character set for either the vegetation, the major designations, or the contour of the land.  This command is useful to allow a clearer distinction between different vegetations, designations, or elevations.</dd>
+<dt>shift-focus (`)&#x27;,`+&#x27;)</dt><dd>Rotate the focus position clockwise.</dd>
+<dt>shift-focus-back (`(&#x27;)</dt><dd>Rotate the focus position counter-clockwise.</dd>
+<dt>highlight-all (`=&#x27;)</dt><dd>Change all of the highlighting characters.</dd>
+<dt>highlight-current (`,&#x27;)</dt><dd>Change the highlight at the focus character.</dd>
+<dt>highlight-horizontal (`-&#x27;)</dt><dd>Change the highlight of the focus and neighboring character.</dd>
+<dt>highlight-upleft-lowright (`\&#x27;)</dt><dd>Change the highlight of the upper left and lower right characters.</dd>
+<dt>highlight-upright-lowleft (`/&#x27;)</dt><dd>Change the highlight of the upper right and lower left characters.</dd>
+<dt>highlight-vertical (`|&#x27;)</dt><dd>Change the highlight of the current character and the character above or below.</dd>
+<dt>troop-listing (TAB)</dt><dd>Display a list of all troops under the control of other nations which are visible in the current sector.</dd>
+<dt>toggle-infomode (`@&#x27;)</dt><dd>Toggle between the standard Conquer map display and a mode which provides more information about the current sector.</dd>
+<dt>zoom-in (`&gt;&#x27;)</dt><dd>If possible, give a more detailed look at the sectors on the map.</dd>
+<dt>zoom-out (`&lt;&#x27;)</dt><dd>Enlarge the scale of the map, if possible, and display more sectors than are currently shown.</dd>
+</dl>
+<p>
+It should be noted that the `^D&#x27; construct indicates a Control-D 
+character, which is obtained by holding down the &quot;Control&quot; key and 
+then pressing the `D&#x27; key. 
+<p>
+Details concerning the display commands can be found elsewhere in the 
+documentation. 
+<p class="see-also">See also: <a href="display.html">Conquer Data Display Routines</a></p>
+<h2>Selection Commands</h2>
+<p>
+Selecting a specific military unit or sector is necessary before that 
+unit or sector may receive commands.  The current sector is indicated 
+on the map portion of the screen by the placement of the cursor, and 
+information about the sector will be displayed in the non-map portions 
+of the screen.  If any units are in the current sector they will be 
+listed on the right side of the screen.  The unit which is highlighted 
+and has a character other than the normal &quot;greater than&quot; sign next to 
+it is considered the &quot;current&quot; unit.  [The character used will be 
+either a plus sign or an asterisk.] 
+<p>
+The commands available for changing selections are: 
+<dl>
+<dt>army-choose (`^A&#x27;,`^G&#x27;)</dt><dd>Set the current unit to be a given army unit.  This will adjust the current sector to the location of the army, if it is not already within the current sector.</dd>
+<dt>army-next (`A&#x27;,`G&#x27;)</dt><dd>Set the current unit to be the next army unit (in numerical order).  If needed, the current sector will also be adjusted.</dd>
+<dt>caravan-choose (`^V&#x27;)</dt><dd>Set the current unit to be a given caravan. Again, the sector of focus is adjusted if the unit is not within the current sector.</dd>
+<dt>caravan-next (`V&#x27;)</dt><dd>Set the current unit to be the numerically next caravan unit.  The current sector will be adjusted if the unit is not already within the current sector.</dd>
+<dt>city-choose (`^E&#x27;)</dt><dd>Relocate the current sector to the city of choice within the nation.</dd>
+<dt>jump-to-capital (`X&#x27;)</dt><dd>Set the current sector to be capital of the nation.</dd>
+<dt>jump-to-mark (`^X&#x27;)</dt><dd>Adjust the current sector to a previously stored location (see the &quot;mark-sector&quot; command) or to the national capital if one has not been stored.</dd>
+<dt>jump-to-pick (`x&#x27;)</dt><dd>Set the current sector to a specified sector, which is entered by coordinates.</dd>
+<dt>mark-sector (NULL-key)</dt><dd>This command will mark the current sector so that it may later be returned to using the &quot;jump-to-mark&quot; command.</dd>
+<dt>navy-choose (`^F&#x27;)</dt><dd>Set the current unit to be a given naval fleet. Again, the sector of focus is adjusted if the unit is not within the current sector.</dd>
+<dt>navy-next (`F&#x27;)</dt><dd>Set the current unit to be the next, in ascending numerical order, naval fleet.  The current sector will be adjusted if need be.</dd>
+<dt>pick-next (`p&#x27;)</dt><dd>Select the next unit by displayed order within the current sector, regardless of unit type.  This command will never change the current sector.</dd>
+<dt>pick-previous (`o&#x27;)</dt><dd>Select the preceding unit within the current sector, as indicated by the display.  This command will also never cause the current sector to be changed.</dd>
+</dl>
+<p>
+Note that the NULL-key is usually defined to be `^@&#x27; or `^ &#x27; 
+(Control-Space). 
+<h2>Unit Manipulation Commands</h2>
+<p>
+Within Conquer, there are three types of military units: army, navy, 
+and caravan units.  Since the actions of a nation are greatly 
+dependent on the power, location, and grouping of its military, there 
+are a number of commands available to allow the manipulation of such 
+units: 
+<dl>
+<dt>army-report (`a&#x27;)</dt><dd>Display a listing of all of the armies within the nation, and allow the manipulation of army units while examining the summary.</dd>
+<dt>auto-army-numbering (`#&#x27;)</dt><dd>The choice of how to number army units can make selection and identification of army units easier.</dd>
+<dt>caravan-report (`v&#x27;)</dt><dd>Summarize the data concerning all of the caravans within the nation, and allow the adjustment of caravans while examining such data.</dd>
+<dt>command-unit (ESC-key)</dt><dd>Perform a quick manipulation of the currently selected unit (army, navy, or caravan).  Some of the options include:  adjusting the speed, renumbering the unit, changing the unit status, setting the supply level, etc.</dd>
+<dt>enlist (`E&#x27;)</dt><dd>Create a new army, navy or caravan from the people and resources within the sector.  The current sector must be a stockade, town, city or capital for it to enlist troops.  Drafted troops are taken from the population of the sector.  Upgrading of units is also possible using this command.</dd>
+<dt>group-report (`g&#x27;)</dt><dd>This command provides a summary of the armies within the nation, just like the &quot;army-report&quot; command, but it limits the data to only those armies within the current sector.</dd>
+<p class="see-also">See also: <a href="movement.html">Unit Relocation</a></p>
+<dt>move-unit (`m&#x27;)</dt><dd>The is one of the most useful commands within the program, as it allows the player to relocate a unit from one sector to another.  The cost and method of unit movement will vary with the type of unit, terrain and nation abilities.</dd>
+<dt>navy-report (`f&#x27;)</dt><dd>This command will provide a summary of all of the naval fleets within the nation, and allow the manipulation of the units while looking at the data.</dd>
+<p class="see-also">See also: <a href="economics.html">Economic Management</a></p>
+<dt>transfer (`t&#x27;)</dt><dd>Move items between a caravan or navy and a city or another caravan or navy.  The currently selected unit will be used as the target of the transfer.  Goods may also be transfered directly between cities using the &quot;region-command&quot;.</dd>
+</dl>
+<p>
+Normally the ESC-key is a single button, or `^[&#x27; (Control-Left 
+Bracket). 
+<h2>Informational Commands</h2>
+<p>
+In addition to having a need to manipulate the different military 
+units of your nation, players must be provided with an organized 
+method for retrieving all of the information concerning their nation 
+and the world around them.  The army, navy, and caravan reports are 
+examples of just such commands.  Some more commands for obtaining 
+information are: 
+<dl>
+<dt>campaign-info (`I&#x27;)</dt><dd>This command will provide a summary of the settings for this particular campaign.  Most importantly this screen will indicate many of the settings which were used when the world was created, giving the player an idea of the difficulty of the environment around the nation.</dd>
+<p class="see-also">See also: <a href="customize.html">Conquer Customization Settings</a></p>
+<dt>conquer-options (`0&#x27;)</dt><dd>Through the conquer-options command, the player is able to adjust keybindings, and choose a new relative center for the nation.</dd>
+<p class="see-also">See also: <a href="nations.html">Racial Traits and Nation Roles</a></p>
+<dt>diplomacy-report (`S&#x27;)</dt><dd>This command is used to review what nations you have met and what your diplomatic status is towards these nations. Here is where you may adjust the status of your nation towards other nations, declaring war or offering a treaty.</dd>
+<p class="see-also">See also: <a href="economics.html">Economic Management</a></p>
+<dt>economy-report (`e&#x27;)</dt><dd>Careful monitoring of the economic prosperity of your nation is necessary for your survival, and this command is the quickest means for obtaining a report concerning your nation on a global or regional basis.</dd>
+<dt>help (`?&#x27;)</dt><dd>List all of the functions and associated keybindings.</dd>
+<p class="see-also">See also: <a href="powers.html">Magical Powers</a></p>
+<dt>magic-info (`W&#x27;)</dt><dd>Display the list of your national powers, as well as provide a method for gaining more.</dd>
+<p class="see-also">See also: <a href="nations.html">Racial Traits and Nation Roles</a></p>
+<dt>nation-info (`i&#x27;)</dt><dd>There are a number of national parameters which can give a good indication as to the strength and well being of your nation.  This command provides access to all such parameters governing your nation, and allows you to adjust those which within your immediate control.</dd>
+<p class="see-also">See also: <a href="display.html">Conquer Data Display Routines</a></p>
+<dt>toggle-infomode (`@&#x27;)</dt><dd>Mentioned under the display commands, this information providing function was worth mentioning again.</dd>
+<dt>troop-listing (TAB)</dt><dd>Also mentioned under the display commands, this command really isn&#x27;t worth mentioning a second time, but I thought I would anyway.</dd>
+<dt>world-scores (`s&#x27;)</dt><dd>It is always a good idea to keep an eye on what other people are up to.  This command gives a short summary of all of the nations in the world and, if your campaign allows it, a description of their strengths.</dd>
+</dl>
+<h2>Communication Commands</h2>
+<p>
+Conquer has been designed as a multi-player fantasy wargame, with much 
+of the emphasis being on the multi-player portion.  As such, 
+communication with other nations is very important, and there are a 
+few commands available to facilitate that: 
+<dl>
+<dt>mail-nation (`M&#x27;)</dt><dd>Send mail to another nation.</dd>
+<dt>read-mail (`R&#x27;)</dt><dd>Read, reply to, and forward mail send to your nation.</dd>
+<dt>read-paper (`P&#x27;)</dt><dd>Check what is happening in the world around you.</dd>
+</dl>
+<p>
+A more detailed description of the mail facility can be found 
+elsewhere in the documenation. 
+<p class="see-also">See also: <a href="xchanges.html">Communication Between Players</a></p>
+<h2>Nation Control Commands</h2>
+<p>
+Being able to manipulate the world around you can give such a nice 
+feeling.  So, in order to allow the player to get that feeling of 
+power that we all need in our lives, there are a few commands 
+available to the ruler of a nation which allow the manipulation of the 
+population and the land: 
+<dl>
+<p class="see-also">See also: <a href="sectors.html">Sector Information</a></p>
+<dt>change-designation (`c&#x27;)</dt><dd>Adjust the designation for the current sector.</dd>
+<p class="see-also">See also: <a href="sectors.html">Sector Information</a></p>
+<dt>construct (`C&#x27;)</dt><dd>Add to the value of a sector by building things such as fortifications, churches, granaries, or any other minor designations.</dd>
+<p class="see-also">See also: <a href="movement.html">Unit Relocation</a></p>
+<dt>move-people (`Z&#x27;)</dt><dd>Relocate civilians at a cost of 50 talons per person to within a two sector radius.</dd>
+<p class="see-also">See also: <a href="economics.html">Economic Management</a></p>
+<dt>region-command (`r&#x27;)</dt><dd>Rename a supply center, change weighting, distribute supplies, or transfer raw materials.</dd>
+</dl>
+<h2>Miscellaneous Commands</h2>
+<p>
+Some functions just can&#x27;t be put into any category: 
+<dl>
+<dt>ignore-key (` &#x27;)</dt><dd>Well, this command does just what it says: the key will be ignored if it is hit.  This is useful to avoid having a bell ring everytime you hit a key which you already know is useless.</dd>
+<dt>recenter-screen (`^R&#x27;)</dt><dd>This command will cause the current sector to be centered within the map portion of the Conquer display.</dd>
+<dt>redraw-screen (`^L&#x27;)</dt><dd>This command will cause the screen to be redrawn.</dd>
+</dl>
+<p>
+Both the &quot;ignore-key&quot; and &quot;redraw-screen&quot; functions should be 
+available through all of the Conquer key-maps. 
+<h2>Is this the end?</h2>
+<p>
+Well, there is still the big question: How do I get out of Conquer? 
+For some people, once you are hooked, forget it.  But, for those few 
+who can actually stop playing, there are the following commands: 
+<dl>
+<dt>login-nation (`z&#x27;)</dt><dd>Switch control to another nation, continuing the addiction.</dd>
+<dt>quit (`q&#x27;)</dt><dd>Okay, so you do want out.  This is the command to do it.</dd>
+<dt>quit-and-save (`Q&#x27;)</dt><dd>This command not only lets you out, but informs Conquer that you are ready for the game to be updated.  When all players have indicated such, early updates might be able to take place.  [For now this does nothing more than the &quot;quit&quot; function]</dd>
+</dl>
+</main>
+</body>
+</html>

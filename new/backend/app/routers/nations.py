@@ -28,6 +28,21 @@ async def list_nations(
     return list(result.scalars().all())
 
 
+@router.get("/mine", response_model=NationOut)
+async def get_my_nation(
+    world_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> Nation:
+    result = await db.execute(
+        select(Nation).where(Nation.world_id == world_id, Nation.user_id == current_user.id)
+    )
+    nation = result.scalar_one_or_none()
+    if not nation:
+        raise HTTPException(status_code=404, detail="You have not joined this world")
+    return nation
+
+
 @router.get("/{nation_id}", response_model=NationOut)
 async def get_nation(
     world_id: uuid.UUID,

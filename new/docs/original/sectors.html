@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sectors — Conquer Original Docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Original Docs (1987)</div>
+  <ul>
+    <li><a href="../index.html">← New Docs</a></li>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="beginnings.html">Beginners Guide</a></li>
+    <li><a href="nations.html">Races &amp; Classes</a></li>
+    <li><a href="sectors.html" class="active">Sectors</a></li>
+    <li><a href="warfare.html">Warfare</a></li>
+    <li><a href="movement.html">Movement</a></li>
+    <li><a href="powers.html">Magic Powers</a></li>
+    <li><a href="economics.html">Economics</a></li>
+    <li><a href="god-powers.html">God Mode</a></li>
+    <li><a href="functions.html">Command Reference</a></li>
+    <li><a href="display.html">Display Guide</a></li>
+    <li><a href="quickies.html">Charts &amp; Summaries</a></li>
+    <li><a href="helpfiles.html">Help Files</a></li>
+    <li><a href="customize.html">Customization</a></li>
+    <li><a href="xchanges.html">Communication</a></li>
+  </ul>
+</nav>
+<main>
+<h1>Sector Information</h1>
+<h2>The Sector</h2>
+<p>
+One of the most basic foundations of the world of Conquer, is the 
+concept of the &quot;sector&quot;.  A sector is the smallest unit of land area 
+upon which the conquer map is based.  For reference, I suppose that a 
+sector could be thought of a being, say 100 to 250 square miles in 
+area, and of regular dimensions.  When troops are moved, they must be 
+moved from one sector to another, with there never being any &quot;in 
+between&quot;; thus a specific unit may be thought of as residing within a 
+specific sector. 
+<p>
+A sector is described as consisting of a certain type of terrain (such 
+as mountains or hills, etc.), and being covered by a certain class of 
+vegetation (such as wood, swamp, or light vegetation).  In addition to 
+being characterized by the general geographical and ecological layout, 
+each sector may also possess special characteristics (such as jewel or 
+metal deposits) which can make it more desirable to the nations in the 
+world. 
+<p>
+As might be expected, nations will be vying for control and possession 
+of the sectors within the world.  Taking control of a sector is 
+accomplished by having troops within the sector, without any other 
+nations claiming the sector or having their troops there to block the 
+claim to the land.  Once a sector is under the ownership of a nation, 
+that nation may then build farms, cities, or a variety of other 
+&quot;designations&quot; to which the land can be put to use. 
+<h2>Vegetation</h2>
+<p>
+The vegetation of a sector is the greatest indicator of how much food 
+and wood is capable of being raised within the sector, and even 
+indicates how easily a unit may move through the sector.  Also, each 
+racial class will have a preference towards certain vegetations, being 
+better suited towards survival in such sectors. 
+<p>
+The complete list of the twelve vegetation types is given below.  The 
+bracketed expression shows the default map character, food production 
+potential and wood production potential, respectively. 
+<dl>
+<dt>barren [`b&#x27;, 4, 0]</dt><dd>Such land is barely habitable, without any potential for wood and only a small portion of food can be harvested from this sector.  Elves actually find such sectors unsuitable for farming.</dd>
+<dt>desert [`.&#x27;, 0, 0]</dt><dd>A desert is a barren and inhospitable place, and for most nations provides nothing of value.</dd>
+<dt>forest [`f&#x27;, 4, 8]</dt><dd>A forest sector provides only a minimal supply of food for most nations due to the over abundance of trees, which cover most of the available land of the sector.</dd>
+<dt>good [`g&#x27;, 9, 2]</dt><dd>A sector with good vegetation provides more food producing potential than any other vegetation type, and also provides a small amount of wood potential.</dd>
+<dt>ice [`i&#x27;, 0, 0]</dt><dd>This inhospitable and harsh vegetation is not for most nations, and therefore provides no food or wood resources.</dd>
+<dt>jungle [`j&#x27;, 0, 10]</dt><dd>This harsh temperate vegetation is inhospitable to most nations, but has an abundant wood supply if the nation can live within it to harvest it.</dd>
+<dt>light vegetation [`l&#x27;, 6, 1]</dt><dd>This vegetation indicates land capable of supporting moderate food harvests and very light wood harvests.</dd>
+<dt>none [`~&#x27;, 0, 0]</dt><dd>Only water sectors possess no vegetation.</dd>
+<dt>swamp [`&quot;&#x27;, 0, 2]</dt><dd>A sector with the vegetation designation of swamp is deemed uninhabitable and is therefore not useful to most nations.</dd>
+<dt>tundra [`,&#x27;, 0, 0]</dt><dd>This harsh icy vegetation is uninhabitable to all nations, and provides no food or wood resources whatsoever.</dd>
+<dt>volcano [`!&#x27;, 0, 0]</dt><dd>A volcano is a magnificent display of the power of nature... creating a sector which is inaccessible to most everyone.</dd>
+<dt>wood [`w&#x27;, 7, 4]</dt><dd>A sector whose vegetation is moderately wooded. Wood sectors are suited for wood or food production, since the land is both fertile and covered with a fair amount of trees.</dd>
+</dl>
+<p>
+Some of the uninhabitable vegetations may become usable once certain 
+magical powers are obtained. 
+<p class="see-also">See also: <a href="powers.html">Magical Powers</a></p>
+<h2>Elevation</h2>
+<p>
+The terrain of a sector can play a significant role in game play.  The 
+difficulty of moving into a sector is a direct factor of the terrain 
+and vegetation of the sector.  Also, the attractiveness of the sector 
+to the population is affected by the terrain of the sector.  And 
+finally, and possibly most importantly, the defensive capabilities of 
+a sector are largely a result of the terrain. 
+<p>
+The are only six elevation types, which range lowest to highest: 
+water, valley, clear, hill, mountain, peak.  A more descriptive list 
+is given below, with the affect that terrain has upon both food and 
+wood production listed within brackets next to the default map symbol. 
+<dl>
+<dt>water [`~&#x27;, 0, 0]</dt><dd>The terrain in this sector is non-existent, being covered by water from a sea or lake.  This sector is inaccessible to overland troops, but provides easy travel for naval or flying units.</dd>
+<dt>valley [`v&#x27;, +1, +1]</dt><dd>The ruggedness of this terrain has caused the contour of the land to be shaped such that passage must take place through a valley area.  This provides ideal land for ambushes and fortified defenses.  Movement is only slightly hindered in such terrain.</dd>
+<dt>flat [`-&#x27;, +1, 0]</dt><dd>A sector with the elevation of flat may be considered generally level, and easy to move through, with little in the way of offensive or defensive enhancement.</dd>
+<dt>hill [`%&#x27;, 0, 0]</dt><dd>The terrain of a sector consisting of hills would provide only minor adjustments to both attack and defense, but would be of good benefit to fortified defenses in such a region.  The movement is only slightly affected by this terrain.</dd>
+<dt>mountain [`^&#x27;, -1, -1]</dt><dd>Mountainous terrain is considered very beneficial to both fortified structures and defensive positions.  But, such sectors are more difficult to move through.</dd>
+<dt>peak [`#&#x27;, -2, -2]</dt><dd>Sectors consisting of mountain peaks are easily accessible only to flying troops, and then just for passing through. It is unlikely that a flying unit could survive landing upon such harsh terrain.</dd>
+</dl>
+<p>
+Again, motion through sectors is governed by both vegetation and 
+elevation. 
+<p class="see-also">See also: <a href="movement.html">Unit Relocation</a></p>
+<h2>Tradegoods</h2>
+<p>
+Within many, if not most, of the sectors of the world, there exists a 
+single &quot;special&quot; trait of the sector which can make the sector even 
+more powerful to a productive nation.  These &quot;traits&quot;, or tradegoods, 
+provide the sector with a potential for harvesting rare minerals, 
+growing rare fruits, or even for the finding of magical artifacts. 
+<p>
+There are a number of different classes of tradegoods, which each 
+class providing a different method of harvesting the tradegood, as 
+well as a different result for having such a tradegood harvested. 
+<p>
+The various tradegood classes, and the method of using the tradegoods 
+within the class are: 
+<dl>
+<dt>None</dt><dd>This class is an indication that no tradegoods are within the sector.</dd>
+<dt>Popularity</dt><dd>These goods are harvested by farms cultivating the crops, or in some cases, by just having civilians in the sector.  Such materials increase the popularity of the national government.</dd>
+<dt>Communications</dt><dd>Building a supply center of at least the indicated level provides the nation with the ability to make use of the communication method within the sector.  Such methods improve the communication range of both the supply center and the nation.</dd>
+<dt>Fishing</dt><dd>Building a fishing &quot;Farm&quot; within the sector gives the nation the ability to harvest fish from nearby water sectors.  Thus, fishing provides increased food production for the sector.</dd>
+<dt>Farming</dt><dd>The tools necessary to increase farming production are available within the sector.  They provide added food production potential and increase the farming ability of the nation.</dd>
+<dt>Spoilrate</dt><dd>Building a supply center within a sector with a tradegood of this class decreases the rate at which food will spoil within that sector.</dd>
+<dt>Lumber</dt><dd>A sector with added wood potential may be harvested using lumberyards.</dd>
+<dt>Knowledge</dt><dd>Towns and Cities with such tradegoods add to the wealth of knowledge in the nation.</dd>
+<dt>Eat Rate</dt><dd>Farm sectors can be used to harvest such valuable edibles. Increasing the energy value of the food intact decreases the volume of food the nation needs to consume.</dd>
+<dt>Health</dt><dd>Shrines and the priests within the shrines understand how to make use of the herbs for the good of the nation.  Using such tradegoods increases the health of the nation population.</dd>
+<dt>Terror</dt><dd>Cities with such items increase the terror and fear the populace feels towards their government.</dd>
+<dt>Magical</dt><dd>Shrines built around such magical items increase the spell casting ability of the nation.</dd>
+<dt>Metals</dt><dd>Metal mines are used to gather such raw resources and provide metal ore for the nation.</dd>
+<dt>Jewels</dt><dd>Jewel mines dig the valuable minerals from the earth, providing jewels for the nation.</dd>
+</dl>
+<p>
+A minimum number of civilians must occupy a sector for the tradegood 
+to be &quot;harvested&quot;, and sometimes conditions must be met before a 
+tradegood is visible to a nation.  The next section lists the 
+tradegoods grouped by type. 
+<p class="see-also">See also: <a href="economics.html">Economic Management</a></p>
+<h2>The Individual Tradegoods</h2>
+<pre class="table">
+    Popularity:  furs, wool, cloth, beer, wine, cannabis, poppy.
+
+    Cummunications:  mules, horses, pigeons, griffons.
+
+    Fishing:  pike, crayfish, crab, salmon, trout, shrip, lobster, flounder.
+
+    Eat Rate:  barley, peas, wheat, dairy, rice, corn, sugar, fruit, honey.
+
+    Spoilrate:  pottery, nails, salt, granite.
+
+    Lumber:  bamboo, pine, oak, redwood, mahogany.
+
+    Knowledge:  papyrus, drama, math, library, literature, law, philosophy.
+
+    Farming:  oxen, yeoman, mulch, irrigation, rotation, plows, manure.
+
+    Health:  sassafras, sulfa, poppy, foxglove, kannabis, bread mold,
+       parsley, sage, rosemary, thyme, wolfsbane.
+
+    Terror:  prison, curfews, torture, gallows, dungeon, pogrom.
+
+    Magical:  icons, scrolls, altars, potions, mirrors, scepter, tomes,
+       orbs, rings, staves, crystals.
+
+    Metals:  nickel, copper, lead, tin, bronze, iron, bauxite, steel,
+       titanium, mithral, iridium, adamantine.
+
+    Jewels:  quartz, jade, turquoise, marble, sapphires, garnet, emeralds,
+       corundum, silver, tourmaline, gold, opals, rubies, diamonds, platnum.
+</pre>
+<p>
+An even more detail listing of the tradegood values, workers needed, 
+and rarity of the various tradegoods is available in the online 
+documentation. 
+<p class="see-also">See also: <a href="#">Online documentation: Tradegoods</a></p>
+<h2>What are designations?</h2>
+<p>
+Once a nation owns a sector, that nation may use it to produce various 
+goods and resources, or to construct fortifications, bridges, or even 
+canals.  The terrain and vegetation of a sector would be a key factor 
+in deciding how each sector should be put to use.  When a use for a 
+sector has been determined, that sector is given a &quot;designation&quot; which 
+will then indicate what the people in the sector are to do for a 
+living. 
+<p>
+In order to make the most use of a sector, there are two classes of 
+designations:  major and minor.  The major designations may be thought 
+of as the &quot;dedicated use&quot; for the sector; the minor designations may 
+be thought of as the secondary constructions placed within the sector 
+to contribute to the major function of the sector.  Some examples of 
+major designations are:  farms, mines, and cities.  Some examples of 
+minor designations are:  roads, granaries, and churches. 
+<p>
+It should be noted that the civilians of a nation will move in or out 
+of a sector based on what the major or minor designations are.  [After 
+all, would you want to work in an iron mine?] 
+<h2>The Major Designations</h2>
+<p>
+As noted before, major designations may be thought of as the &quot;use&quot; to 
+which the sector is put.  Including &quot;none&quot;, there are sixteen major 
+designations: 
+<dl>
+<dt>farm [`F&#x27;]</dt><dd>A farm sector is dedicated to growing food, but is only in the beginning stages of crop production.  Farm sectors become fertile only during the transition between spring and summer.</dd>
+<dt>fertile [`F&#x27;]</dt><dd>A fertile sector is a farm sector whose crops are starting to be productive.  A fertile sector will become fruitful when the summer changes to fall.</dd>
+<dt>fruitful [`F&#x27;]</dt><dd>A fruitful farm sector is one whose crops are available for harvest.  Only fertile can become fruitful.  Once fall turns to winter, fruitful sectors will revert to farms.</dd>
+<dt>metal mine [`m&#x27;]</dt><dd>Metals such as iron and bronze are dug from the ground in metal mines.  Only sectors containing discovered metal deposits may become metal mines.</dd>
+<dt>jewel mine [`$&#x27;]</dt><dd>A jewel mine is much like a metal mine, but the deposits to be mined are precious metals and gems, not metals.</dd>
+<dt>lumberyard [`:&#x27;]</dt><dd>The last production designation is the lumberyard. This sector supplies wood to neighboring sectors.</dd>
+<dt>shrine [`@&#x27;]</dt><dd>A shrine sector can be a focus for magical energy. National spell casting powers will increase if shrines posses magical tradegoods.  Resting leaders in shrines increases recuperative powers and spell casting from within a shrine is much easier than elsewhere.</dd>
+<dt>bridge [`[&#x27;]</dt><dd>A bridge sector is useful to get troops over a water sector which is separating two land sectors.</dd>
+<dt>canal [`=&#x27;]</dt><dd>A canal sector is used to create a waterway between two land separated water sectors.</dd>
+<dt>wall [`|&#x27;]</dt><dd>Walls were one of the great achievements of the Romans. Such sectors provide added defense and prevent movement of enemy troops unless they come through unimpeded.</dd>
+<dt>cache [`&amp;&#x27;]</dt><dd>A sector with this designation acts as nothing more than a storage site for materials.  Due to the nature of the cache, it is not visible to other nations, acting as a hidden depot.</dd>
+<dt>stockade [`s&#x27;]</dt><dd>Stockades can hold various resources, as well as increase the defense of troops garrisoned within.  They are, however, not among the most congenial of accommodations, and are usually only placed in sectors which cannot adequately support civilians.</dd>
+<dt>towns [`t&#x27;]</dt><dd>A town sector makes a good living location for both civilians and soldiers.  While not quite possessing the size or capabilities of a full city, it does provide for its own defenses.</dd>
+<dt>cities [`c&#x27;]</dt><dd>City sectors can become the backbone of your nation, distributing resources to many neighboring sectors.  Defensive potential is excellent.</dd>
+<dt>capital [`C&#x27;]</dt><dd>A capital is the headquarters of a nation&#x27;s government.  A nation without a designated capital can become unfocused and may be susceptible to unrest.</dd>
+</dl>
+<p>
+Economic stability depends upon good selection of designations. 
+<p class="see-also">See also: <a href="economics.html">Economic Management</a></p>
+<h2>The Cost of Designations</h2>
+<p>
+In order to actually construct the designations for a sector, each 
+nation must spend a certain amount of raw materials depending on which 
+designation is being built and what constructions are already within 
+the sector.  It is important to note that the raw materials must be 
+available in a nearby supply center.  Otherwise, the materials must be 
+carried into the sector via ships or wagons. 
+<p>
+The base expenditures needed for each designation type is as 
+follows: 
+<pre class="table">
+         Sector Designation           wood       metals      talons
+         ----------------------     --------    --------    --------
+         None                            0           0         500
+         Farm                            0           0        1000
+         Metal Mine                    100         200        3000
+         Jewel Mine                    100         200        3000
+         Lumberyard                     50         200        2000
+         Shrine +                      150         500        5000
+         Bridge                      15000        3000       50000
+         Canal                        7500        4000       40000
+         Wall                        10000        5000       35000
+         Cache *                      1000        2000        2000
+         Stockade *                  10000        1000       10000
+         Town *                      10000       10000       10000
+         City **                      5000       50000       20000
+         Capital *                    1000        5000      150000
+
+            *  - this designation takes one month to construct
+            ** - this designation takes three months to construct
+            +  - 1000 jewels are also needed to build a shrine
+          Sectors may not be designated as Fertile or Fruitful, so
+            there is no listing for either of these sector types.
+</pre>
+<p>
+It might be noted that with the construction of a city, most of the 
+construction costs deal with the building up of the fortifications to 
+more solid metal constructions, and the added expense of increased 
+city government.  With the Capital, almost all of the expenses are for 
+the relocation of the national government. 
+<h2>Designation Support Costs</h2>
+<p>
+It would be nice if sectors, once built did not need any upkeep in 
+order to survive, but in life things are never so easy.  So, each 
+turn, some raw materials will have to be allocated towards upkeep. 
+The amount of the needed upkeep is greatly affected by the type of 
+designation within the sector. 
+<p>
+The chart below indicates the cost per turn for each designation type 
+in metals, wood, and talons.  Also listed is the construction 
+multiplier, which indicates how many times the normal price a minor 
+designation (see the next section) will cost for that particular 
+designation. 
+<pre class="table">
+        Sector Designation       wood      metals     talons     Mult
+      ----------------------   --------   --------   --------   ------
+       None                         0          0          0        1
+       Farm                         0          0         20        1
+       Fertile                      0          0         20        1
+       Fruitful                     0          0         20        1
+       Metal Mine                   5         10         60        1
+       Jewel Mine                   5         10         60        1
+       Lumberyard                   5          8         30        1
+       Shrine +                    10         40         50        1
+       Bridge                      50         50       1000        3
+       Canal                      200         60       1500        2
+       Wall                       100        100       1000        2
+       Cache                        0          0          0        1
+       Stockade                   200        100       3000        3
+       Town                       200         20       1000        5
+       City                       200         50       3000        8
+       Capital                    220         60       3500        8
+         +   = 10 jewels are also needed to support shrines
+</pre>
+<p>
+In addition to all of the above support costs, there is also the 
+matter of food.  For every person in a sector there must be at 
+approximately 1 food unit per person per turn, or starvation will 
+begin.  Of course, as the food supply varies, the population will tend 
+to consume more or less than just 1 food unit per month each, as 
+indicated by the &quot;eat rate&quot; of the nation. 
+<h2>Minor Designations</h2>
+<p>
+As with the real world, there are often many traits to an area of land 
+which can be common even among land used for the most diverse of 
+purposes.  Thus, I have made it possible for sectors to have traits 
+which are a property of the sector, but not a designation.  Since many 
+of these traits actually were full fledged designations in prior 
+versions of conquer, I call them &quot;minor designations&quot;, or 
+constructions. 
+<p>
+Most of the minor designations are able to be built by the nation 
+itself using the command &quot;construct&quot;.  But, some, such as &quot;devastated&quot;, 
+&quot;sieged&quot;, and &quot;for sale&quot; are the results of battles taking place, or 
+other events causing the trait to be present within that sector.  The 
+full list and description of the minor designations are: 
+<dl>
+<dt>devastated</dt><dd>Damage to the land and buildings on the sector has caused it to be greatly reduced in production ability and use.  A sector with such a trait has only a quarter of the productivity of a normal sector of the same class.  The civilians also find it extremely less attractive to live in.</dd>
+<dt>for sale</dt><dd>If the sector has been placed on the trading block, it is indicated by the possession of this trait.</dd>
+<dt>sieged</dt><dd>When enemy armies have encamped their armies around the town or fortress within the sector, and they have successfully implemented their blockade, this trait will be visible.  Troops are stuck within the fortifications, civilians and materials will not be allowed to move either into or out of the sector, and if the sector is a water sector, enemy ships will be unable to enter the sector.</dd>
+<dt>trading post</dt><dd>A site for the exchanging of materials, a trading post is also conducive to business and productivity within the sector.</dd>
+<dt>roads</dt><dd>A sector with roads within it is much easier for military units to move through.  As a matter of fact, the movement is twice as easy with roads as without.</dd>
+<dt>blacksmith</dt><dd>In a society geared around the use of metals, a town blacksmith can prove of great benefit.  When a sector possesses such an able body, metal production can be increased and actual consumption decreased.</dd>
+<dt>university</dt><dd>The scholarly pursuits often lead to the enhancement of the knowledge in a nation.</dd>
+<dt>church</dt><dd>The backbone of many cultures, religion serves to increase the productivity of the masses.</dd>
+<dt>mill</dt><dd>A site for processing grain, a mill will increase the productivity of farms and extend the usefulness of the grain itself.</dd>
+<dt>granary</dt><dd>Used to store grain to reduce spoilage and to provide food for the winter months.</dd>
+<dt>fortified</dt><dd>As much of the world revolves around the use of force, protecting territory is often necessary for survival.  Even the scattered farms can have some form of rudimentary protection in place to protect soldiers and citizens alike.</dd>
+<dt>harbor</dt><dd>With naval power being of great interest to many countries, having a harbor in a town or city will allow fleets easier landing, as well as providing less of a hassle when loading and unloading goods.</dd>
+</dl>
+<h2>The Costs of Construction</h2>
+<p>
+While it would be nice if things were free in this world, there is 
+usually a price for everything.  And, the minor designations are no 
+exception to the rule.  The chart below shows the expenses to build 
+each minor designation.  Note that this number is multiplied by the 
+&quot;multiplier&quot; of the major designation of the sector.  The added 
+expense for the towns and cities is due to the size of such 
+constructions within the larger towns and cities.  [Where a farm might 
+have only 1 or 2 blacksmiths, a city would have many more.] 
+<pre class="table">
+         Sector Designation           wood       metals      talons
+        ----------------------      --------    --------    --------
+         devastated                      0           0        1000
+         for sale                        0           0           0
+         sieged                          0           0           0
+         trading post                  200           0        5000
+         roads                        1000          20        3000
+         blacksmith                      0        1000        2500
+         university                    300           0        2500
+         church                        200          10        3000
+         mill                          300         500        3000
+         granary                       100          50        2000
+         fortified                    1000        2000        5000
+         harbor                       1000         500        3000
+</pre>
+<p>
+And, of course, there are support expenses to worry about.  Many of 
+these expenses are just administrative costs, but most are to assure 
+the upkeep of the facility.  These expenses are also affected by the 
+&quot;multiplier&quot;.  The list of minor designation support costs is: 
+<pre class="table">
+         Sector Designation           wood       metals      talons
+        ----------------------      --------    --------    --------
+         devastated                      0           0           0
+         for sale                        0           0           0
+         sieged                          0           0         200
+         trading post                    1           1        1000
+         roads                          20           1         400
+         blacksmith                      0         200         400
+         university                     10           0         500
+         church                         10           0         300
+         mill                           50          25         200
+         granary                        10           3         200
+         fortified                     100         100         500
+         harbor                        100          25         100
+</pre>
+<h2>The Use of Minor Designations</h2>
+<p>
+The minor designations are generally of great benefit to a sector, and 
+the impact which the construction has is usually dependent on the 
+major designation of the sector.   To be most explicit, if the sector 
+is a supply center, the minor designations of the sector will affect 
+materials as they are stored in, or distributed from the supply 
+center.  If the sector is not a supply center, then the designation 
+will affect materials as they are produced.  This distinction can 
+prove crucial in helping to decide where and when to make 
+constructions upon a sector. 
+<p>
+The two charts below give a description of what the minor designations 
+are useful for in each case: 
+<pre class="table">
+  Construction          Use within Non-Supply Centers
+ ----------------      -------------------------------------------------
+  devastated            productivity at 1/4, attractiveness at 1/8 normal
+  for sale              no affect, a marker for a sale
+  sieged                troops trapped, production down 80%, taxation down 20%
+  trading post          productivity and taxability up by 5%
+  roads                 sector movement cost reduced by half
+  blacksmith            increase metal production by 10%
+  university            production and talon income up by 3%
+  church                talon income down by 5%, production up by 10%
+  mill                  food production up by 10%
+  granary               taxability up by 3%, food storage provides for winters
+  fortified             provide a 10% combat bonus to garrisoned troops
+  harbor                harbors should not be possible in non-supply centers
+</pre>
+<pre class="table">
+  Construction          Use within Supply Centers
+ ----------------      -------------------------------------------------
+  devastated            productivity at 1/4, attractiveness at 1/8 normal
+  for sale              a supply center should not be able to be sold
+  sieged                troops trapped, no supplies go in or out
+  trading post          provide a location for exchanging with other nations
+  roads                 decrease movement cost by 50% within sector
+  blacksmith            decrease regional metal expenditures by 10%
+  university            provide a site for the increase of knowledge
+  church                provide a method of increasing population happiness
+  mill                  decrease regional food expenditures by 10%
+  granary               decrease spoil rate of food within the supply center
+  fortified             provide defensive cover for garrisoned troops
+  harbor                provide site for construction and docking of navies
+</pre>
+</main>
+</body>
+</html>

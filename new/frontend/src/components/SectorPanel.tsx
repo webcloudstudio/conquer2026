@@ -11,6 +11,7 @@ interface SectorPanelProps {
   worldId: string;
   sector: Sector | null;
   playerNation: Nation | null;
+  nations: Nation[];
   onClose: () => void;
   onActionDone: () => void;
 }
@@ -21,7 +22,7 @@ const VEG_NAMES = ["Barren", "Sparse", "Grassland", "Forest", "Dense Forest", "J
 
 const DESIGNATABLE = [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15];
 
-export function SectorPanel({ worldId, sector, playerNation, onClose, onActionDone }: SectorPanelProps) {
+export function SectorPanel({ worldId, sector, playerNation, nations, onClose, onActionDone }: SectorPanelProps) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -29,6 +30,17 @@ export function SectorPanel({ worldId, sector, playerNation, onClose, onActionDo
 
   const owned = sector.owner_nation_id && playerNation
     && sector.owner_nation_id === playerNation.id;
+
+  const ownerNation = sector.owner_nation_id
+    ? nations.find((n) => n.id === sector.owner_nation_id) ?? null
+    : null;
+
+  const ownerLabel = ownerNation ? ownerNation.name : "Unclaimed";
+  const relationBadge = owned
+    ? { text: "Your sector", color: "#3fb950" }
+    : ownerNation
+    ? { text: "Enemy territory", color: "#f85149" }
+    : { text: "Unclaimed", color: "#8b949e" };
 
   async function handleDesignate(d: number) {
     setBusy(true);
@@ -49,6 +61,19 @@ export function SectorPanel({ worldId, sector, playerNation, onClose, onActionDo
     <div style={styles.panel}>
       <button onClick={onClose} style={styles.close}>✕</button>
       <h3 style={styles.title}>Sector ({sector.x}, {sector.y})</h3>
+
+      {/* Ownership badge */}
+      <div style={{ marginBottom: 10 }}>
+        <span style={{ color: "#888", fontSize: 11 }}>Owner: </span>
+        <span style={{ color: "#ddd", fontSize: 11 }}>{ownerLabel}</span>
+        <span style={{
+          marginLeft: 8, padding: "1px 6px", borderRadius: 10, fontSize: 10,
+          background: `${relationBadge.color}22`, color: relationBadge.color,
+          border: `1px solid ${relationBadge.color}66`,
+        }}>
+          {relationBadge.text}
+        </span>
+      </div>
 
       <table style={styles.table}>
         <tbody>

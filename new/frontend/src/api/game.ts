@@ -9,6 +9,9 @@ export const getWorld = (id: string) => api.get<World>(`/worlds/${id}`).then((r)
 export const listNations = (worldId: string) =>
   api.get<Nation[]>(`/worlds/${worldId}/nations/`).then((r) => r.data);
 
+export const getMyNation = (worldId: string) =>
+  api.get<Nation>(`/worlds/${worldId}/nations/mine`).then((r) => r.data);
+
 export const joinWorld = (worldId: string, body: {
   name: string;
   leader_title: string;

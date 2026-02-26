@@ -24,6 +24,8 @@ export interface World {
 
 export interface Nation {
   id: string;
+  world_id: string;
+  user_id: string | null;
   name: string;
   leader_title: string;
   race: string;
@@ -33,6 +35,11 @@ export interface Nation {
   metals: number;
   food: number;
   wood: number;
+  talons_produced: number;
+  jewels_produced: number;
+  metals_produced: number;
+  food_produced: number;
+  wood_produced: number;
   power_fire: number;
   power_water: number;
   power_earth: number;
@@ -42,6 +49,15 @@ export interface Nation {
   capital_x: number | null;
   capital_y: number | null;
 }
+
+export const UnitTypeName: Record<number, string> = {
+  0: "Soldiers", 1: "Militia", 2: "Light Infantry", 3: "Heavy Infantry",
+  4: "Archers", 5: "Cavalry", 6: "Heavy Cavalry", 7: "Legionnaires",
+  8: "Pikemen", 9: "Rangers", 10: "Siege", 11: "Spies",
+  12: "Mercenaries", 13: "Berserkers", 14: "Guard", 15: "Assassins",
+  16: "Wolves", 17: "Bears", 18: "Giants", 19: "Dragons",
+  20: "Undead", 38: "Infantry",
+};
 
 export interface Sector {
   x: number;

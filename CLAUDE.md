@@ -104,3 +104,7 @@ conquer -n god  # Login as god (admin) in the game client
 ## Code Style
 
 The codebase follows late-1980s Unix C conventions. Modern additions use C99 (`-std=c99`). Platform conditionals use `#ifdef BSD`, `PLATFORM_LINUX`, etc. Compiler flags enforce `-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-qual`. All files carry SPDX GPL-3.0-or-later headers per `REUSE.toml`.
+
+## Update Log
+
+After completing any functional change to the `new/` Python/React application, append a brief summary entry to `new/UPDATES.md` (newest entries first).

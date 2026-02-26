@@ -8,11 +8,57 @@ import { HexMap } from "../components/HexMap";
 import { SectorPanel } from "../components/SectorPanel";
 import { NationDashboard } from "../components/NationDashboard";
 import { ArmyPanel } from "../components/ArmyPanel";
-import { listSectors, listArmies, listMyArmies, listNations, getWorld } from "../api/game";
+import { JoinWorldPanel } from "../components/JoinWorldPanel";
+import {
+  listSectors, listArmies, listMyArmies, listNations, getWorld, getMyNation,
+} from "../api/game";
 import type { Army, Nation, Sector, World } from "../types";
 import { useAuthStore } from "../store/auth";
 
 type Tab = "armies" | "nations";
+
+// BFS to compute reachable hexes (even-r offset)
+function computeReachable(
+  army: Army,
+  sectors: Sector[],
+): { x: number; y: number }[] {
+  const sectorMap = new Map(sectors.map((s) => [`${s.x},${s.y}`, s]));
+  const visited = new Set<string>();
+  const queue: { x: number; y: number; steps: number }[] = [
+    { x: army.x, y: army.y, steps: 0 },
+  ];
+  visited.add(`${army.x},${army.y}`);
+  const result: { x: number; y: number }[] = [];
+
+  // Even-r offset neighbors
+  function neighbors(x: number, y: number): { x: number; y: number }[] {
+    const even = y % 2 === 0;
+    return [
+      { x: x + 1, y },
+      { x: x - 1, y },
+      { x: x, y: y - 1 },
+      { x: x, y: y + 1 },
+      { x: even ? x - 1 : x + 1, y: y - 1 },
+      { x: even ? x - 1 : x + 1, y: y + 1 },
+    ];
+  }
+
+  while (queue.length > 0) {
+    const cur = queue.shift()!;
+    for (const nb of neighbors(cur.x, cur.y)) {
+      const key = `${nb.x},${nb.y}`;
+      if (visited.has(key)) continue;
+      const sec = sectorMap.get(key);
+      if (!sec || sec.altitude === 0) continue; // skip water
+      visited.add(key);
+      if (cur.steps + 1 <= army.movement) {
+        result.push({ x: nb.x, y: nb.y });
+        queue.push({ x: nb.x, y: nb.y, steps: cur.steps + 1 });
+      }
+    }
+  }
+  return result;
+}
 
 export function GamePage() {
   const { worldId } = useParams<{ worldId: string }>();
@@ -27,38 +73,49 @@ export function GamePage() {
   const [myNation, setMyNation] = useState<Nation | null>(null);
   const [selectedHex, setSelectedHex] = useState<{ x: number; y: number } | null>(null);
   const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
+  const [selectedArmy, setSelectedArmy] = useState<Army | null>(null);
+  const [movementRange, setMovementRange] = useState<{ x: number; y: number }[] | null>(null);
+  const [centerHex, setCenterHex] = useState<{ x: number; y: number } | null>(null);
   const [tab, setTab] = useState<Tab>("armies");
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     if (!worldId) return;
-    const [w, s, a, ma, n] = await Promise.all([
+    const [w, s, a, ma, n, mn] = await Promise.all([
       getWorld(worldId),
       listSectors(worldId),
       listArmies(worldId),
-      listMyArmies(worldId).catch(() => []),
+      listMyArmies(worldId).catch(() => [] as Army[]),
       listNations(worldId),
+      getMyNation(worldId).catch(() => null),
     ]);
     setWorld(w);
     setSectors(s);
     setArmies(a);
     setMyArmies(ma);
     setNations(n);
-
-    // Find player's nation
-    if (user) {
-      // myArmies endpoint 403s without a nation — we infer from nation list
-      // Backend doesn't return user_id in NationOut yet, so we rely on /nations/mine if added
-      setMyNation(null); // will be refined when we add GET /nations/mine
-    }
+    setMyNation(mn);
     setLoading(false);
-  }, [worldId, user]);
+  }, [worldId]);
 
   useEffect(() => { load(); }, [load]);
 
   function handleSelectHex(x: number, y: number, sector: Sector | null) {
     setSelectedHex({ x, y });
     setSelectedSector(sector);
+  }
+
+  function handleSelectArmy(army: Army | null) {
+    setSelectedArmy(army);
+    if (army) {
+      setMovementRange(computeReachable(army, sectors));
+    } else {
+      setMovementRange(null);
+    }
+  }
+
+  function handleCenterMap(x: number, y: number) {
+    setCenterHex({ x, y });
   }
 
   if (loading) {
@@ -69,6 +126,8 @@ export function GamePage() {
       </div>
     );
   }
+
+  const showJoinPanel = !myNation;
 
   return (
     <div style={styles.root}>
@@ -96,15 +155,20 @@ export function GamePage() {
       <div style={styles.body}>
         {/* Left sidebar */}
         <div style={styles.sidebar}>
-          {tab === "armies" && worldId && (
+          {showJoinPanel && worldId && (
+            <JoinWorldPanel worldId={worldId} onJoined={load} />
+          )}
+          {!showJoinPanel && tab === "armies" && worldId && (
             <ArmyPanel
               worldId={worldId}
               armies={myArmies}
               selectedHex={selectedHex}
               onActionDone={load}
+              onSelectArmy={handleSelectArmy}
+              onCenterMap={handleCenterMap}
             />
           )}
-          {tab === "nations" && (
+          {!showJoinPanel && tab === "nations" && (
             <div style={{ padding: 12 }}>
               <h4 style={{ color: "#ccc", margin: "0 0 8px", fontSize: 13 }}>Nations</h4>
               {nations.map((n) => (
@@ -124,7 +188,10 @@ export function GamePage() {
             sectors={sectors}
             armies={armies}
             nations={nations}
+            myNation={myNation}
             selectedHex={selectedHex}
+            movementRange={movementRange}
+            centerHex={centerHex}
             onSelectHex={handleSelectHex}
           />
           {selectedSector && worldId && (
@@ -132,6 +199,7 @@ export function GamePage() {
               worldId={worldId}
               sector={selectedSector}
               playerNation={myNation}
+              nations={nations}
               onClose={() => { setSelectedSector(null); setSelectedHex(null); }}
               onActionDone={load}
             />

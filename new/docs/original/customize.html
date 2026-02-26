@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customization — Conquer Original Docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav class="sidebar">
+  <div class="logo">⚔️ Original Docs (1987)</div>
+  <ul>
+    <li><a href="../index.html">← New Docs</a></li>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="beginnings.html">Beginners Guide</a></li>
+    <li><a href="nations.html">Races &amp; Classes</a></li>
+    <li><a href="sectors.html">Sectors</a></li>
+    <li><a href="warfare.html">Warfare</a></li>
+    <li><a href="movement.html">Movement</a></li>
+    <li><a href="powers.html">Magic Powers</a></li>
+    <li><a href="economics.html">Economics</a></li>
+    <li><a href="god-powers.html">God Mode</a></li>
+    <li><a href="functions.html">Command Reference</a></li>
+    <li><a href="display.html">Display Guide</a></li>
+    <li><a href="quickies.html">Charts &amp; Summaries</a></li>
+    <li><a href="helpfiles.html">Help Files</a></li>
+    <li><a href="customize.html" class="active">Customization</a></li>
+    <li><a href="xchanges.html">Communication</a></li>
+  </ul>
+</nav>
+<main>
+<h1>Conquer Customization Settings</h1>
+<h2>Tailoring Conquer</h2>
+<p>
+During the writing of Conquer, there were many times when people have 
+said that they wanted things done differently from the way I 
+envisioned it.  While I could very easily have told them where they 
+can take their &quot;valuable suggestions&quot; :-), I found that there were one 
+or two of them that were bigger than me.  So, I decided that I would 
+listen politely to the suggestions and then, if possible, make it an 
+option.  Of course, I still decided what options were the &quot;default&quot; 
+ones, so I ended up with the last say anyway. 
+<p>
+There are now many things within Conquer which allow the user to 
+specify how the user interface is to behave for them.  The display 
+modes can be created or adjusted at will, the key bindings can be 
+manipulated in almost any manner, and there are a number of flags 
+which can be set based on the tastes of the user. 
+<p>
+Except for the display modifications, which are under the 
+&quot;custom-display&quot; function 
+<p class="see-also">See also: <a href="display.html">Conquer Data Display Routines</a></p>
+, all of the configuration commands are kept under the 
+&quot;conquer-options&quot; command.  This command provides a list of options by 
+which the user may set a number of different preferences, including 
+the rebinding of the entire key map of Conquer. 
+<p>
+It should be noted that in all of the portions of Conquer containing 
+key maps, the key bindings may be adjusted by calling the 
+&quot;conquer-options&quot; command while within that mode. 
+<h2>The conquer-options Command</h2>
+<p>
+Conquer currently supports twenty-one different options under the 
+&quot;conquer-options&quot; function.  After executing the &quot;conquer-options&quot; 
+function, type in the name of the desired option to make use of it. 
+The complete list of options, and their meanings, is: 
+<dl>
+<dt>all-blanks</dt><dd>On detailed zoom, leave any unused bottom characters of the sector blank, as opposed to the normal method of using underlines.</dd>
+<dt>bind-key</dt><dd>Interactively assign a set of keystrokes to call a function.</dd>
+<dt>bottom-lines</dt><dd>For detailed zooms, set the bottom of characters of water sectors to be underlines, unless either &quot;water-bottoms&quot; or &quot;all-blanks&quot; is enabled.</dd>
+<dt>check-keys</dt><dd>Verify that all key bindings in the current mode are properly set.  Any conflicts or missing functions will be reported as they are encountered.  This is done each time Conquer is started.</dd>
+<dt>expert</dt><dd>This toggles the setting of the &quot;expert&quot; option.  If Conquer considers you an expert, it will no longer verify most commands, and will assume you know what you are doing.  Any complaints resulting from the use of this option will be given due consideration.</dd>
+<dt>gaudy</dt><dd>When enabled, any time the nation&#x27;s name is encountered within the news, it will be highlighted so as to improve its readability.</dd>
+<dt>header-mode</dt><dd>If on, the header summary will be shown upon entering the mail editor, otherwise the next unread mail message will immediately be displayed.</dd>
+<dt>info-mode</dt><dd>It is possible to toggle whether or not more information about the current sector will be visible during the Conquer map display.  The command &quot;toggle-infomode&quot; is also provided, since this is an option which should be enabled or disabled with ease.</dd>
+<dt>mail-check</dt><dd>If on, and your system supports it, Conquer will check the mail spool to determine if any real electronic has been sent. Turning this option off will prevent &quot;hanging&quot; if an NFS mounted mail spool directory becomes inaccessible.</dd>
+<dt>pager-offset</dt><dd>Specify how many lines down the screen the Conquer pager focus line is.</dd>
+<dt>pager-scroll</dt><dd>Specify how many lines the Conquer pager will scroll when paged.</dd>
+<dt>pager-tab</dt><dd>The number of spaces used to represent a tab character are controlled by this option.  A value of zero indicates that the tab should remain unconverted.</dd>
+<dt>read-opts</dt><dd>Read in a file that is in the &quot;.conqrc&quot; format.</dd>
+<dt>rebind-key</dt><dd>Assign a currently used key binding to another function.</dd>
+<dt>recenter-map</dt><dd>Assign the current sector location to be the relative center of the national coordinate map.  This provides a method of aligning coordinate systems between nations.</dd>
+<dt>reset-keys</dt><dd>Restore the key bindings to their default settings, making it possible to at least recover from any keybinding problems.</dd>
+<dt>store-opts</dt><dd>Store all of the current Conquer configuration options into an automatically generated customization file.   A query is made to determine the exact file location for such an operation.  Note that &quot;nation&quot; and &quot;campaign&quot; are not stored to avoid the possibility of overwriting prior defaults.</dd>
+<dt>supply-level</dt><dd>When a military unit is created, it will automatically be built with food and payment for a given number of turns.  This option controls how many such supplies are provided.</dd>
+<dt>terminal-bell</dt><dd>If on, Conquer will beep, if possible, whenever an error occurs.</dd>
+<dt>unbind-key</dt><dd>Remove a given key binding from the current key map.</dd>
+<dt>water-bottoms</dt><dd>If on, the bottom portion of water sectors will always be shown with water, and not underlines, in the detailed zoom.</dd>
+</dl>
+<h2>Building a Customization File</h2>
+<p>
+Conquer provides support for customization files, which take the form 
+of plain text files containing configuration commands.  These files 
+can be created manually, or can be automatically generated using the 
+&quot;store-opts&quot; option from the &quot;cnoquer-options&quot; function. 
+<p>
+The configuration file consists of a list of single line commands, 
+along with comments, which are indicated by a number sign (#) as the 
+first non-space character.  The list of supported customization 
+commands, and their meanings, is: 
+<dl>
+<p class="indent">
+<dt>include: path-to-file Through the use of the &quot;include&quot; customization command, the user is able to specify additional customization files to be read in by Conquer.  This is very useful for breaking apart the customization environment into separate parts for ease of control.  [In the future, I plan to enable conditional include options to allow customization based on the terminal type or other information]</dt>
+<p class="indent">
+<p class="indent">
+<dt>nation: nationname name: nationname Both of the above commands are used to specify a default nation to be used by the player.  These are useful to avoid having to always specify the nation name on the command line.  This may be overridden by either the command line or the environment variable.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>campaign: campaignname data: campaignname directory: campaignname These customization commands provide the user with a method of specifying a default campaign to be accessed.  They may be overridden by either the command line or the environment variable.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>all-blanks bottom-lines expert gaudy header-mode info-mode mail-check terminal-bell water-bottoms All of the above commands turn the appropriate option on.  If it is proceeded by a `!&#x27; character, that option is turned off.</dt>
+<p class="indent">
+<dt>supply-level: # Set number of supply units each unit should receive when enlisted.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>pager-tab: # pager-scroll: # pager-offset: # The above options, followed by a numeric indicate that the appropriate variables should be given the indicated value.</dt>
+<p class="indent">
+<dt>zoom-level: detail The zoom level setting indicates what the beginning zoom setting will be.  The zoom level may be either &quot;detail&quot;, &quot;medium&quot;, or &quot;full&quot;.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>contour Type=C vegetation Type=C designation Type=C Specify what characters are to be used to display the indicated contour, vegetation or designation types.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>unbind-key map &quot;keystr&quot; bind-key map &quot;keystr&quot; function-name rebind-key map &quot;keystr&quot; function-name The above commands allow for the specification of a key binding for an indicated Conquer key map.  The currently available maps are global, mail, magic, move, and reader.  The key string is a set of characters enclosed by either single or double quotes.  The key string should be composed entirely of displayable characters, with a `^&#x27; character being interpreted as an indicator for control characters, and the &#x27;\&#x27; character being used to give &quot;C&quot; style character sequences or just to quote a given character.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>display-mode &quot;Name&quot; highlight style display-mode &quot;Name&quot; focus hexloc display-mode &quot;Name&quot; hexloc style Create or modify display modes and its display, focus or highlighting settings.  A hexloc indicates the position which can be either low-left, low-right, up-left or low-right.  The styles are the display or highlight settings which are available to the user.  The focus command is used to indicate which of the four hexloc positions is to be considered the most important.</dt>
+<p class="indent">
+<p class="indent">
+<p class="indent">
+<dt>default-display highlight style default-display focus hexloc default-display hexloc style Set the default display mode settings in much the same manner as the named display modes.  This default display method is used Conquer is first entered.</dt>
+</dl>
+<h2>The Environment Variable</h2>
+<p>
+In addition to the the customization file, Conquer provides support 
+for an the &quot;CONQ_OPTS&quot; environment variable.  I won&#x27;t get into a 
+discussion on how to set the environment variable here, since that 
+varies with each user&#x27;s shell or operating system, and is usually easy 
+to do.  But, I will describe just what things can be set using the 
+environment variable. 
+<p>
+The environment variable is not quite as robust as the customization 
+file, but it does provide a quick way of overriding many options which 
+were set in such a file, without having to permanently change that 
+file.  Anyway, the environment variable supports a list of mostly one 
+character items which correspond with Conquer options: 
+<dl>
+<p class="indent">
+<dt>B A `B&#x27; character indicates to enable the &quot;all-blanks&quot; option.  It may be disabled by preceding it with a `!&#x27; character.</dt>
+<p class="indent">
+<dt>b A `b&#x27; character indicates to enable the &quot;bottom-lines&quot; option.  It too may be disabled with a preceding `!&#x27; character.</dt>
+<p class="indent">
+<dt>e An `e&#x27; represents the &quot;mail-check&quot; option.  It may be disabled by preceding it with a `!&#x27;. A</dt>
+<p class="indent">
+<dt>G The &quot;gaudy&quot; highlighting option is enabled with a single `G&#x27; option, and may be disabled by preceding it with a `!&#x27; character.</dt>
+<p class="indent">
+<dt>H The &quot;header-mode&quot; is controlled with a `H&#x27; character.  If preceded by a `!&#x27; character, it may be disabled.</dt>
+<p class="indent">
+<dt>i Choosing to start with info-mode enabled is done using the `i&#x27; character within the environment variable.  The `!&#x27; will disable it.</dt>
+<p class="indent">
+<dt>t Enabling the &quot;terminal-bell&quot; option is done with a `t&#x27;.  A preceding exclamation point will disable it.</dt>
+<p class="indent">
+<dt>w The &quot;water-bottoms&quot; option is set using the `w&#x27; flag, or disabled with a &#x27;!w&#x27; sequence.</dt>
+<p class="indent">
+<dt>x Becoming an &quot;expert&quot; is no problem, just use the `x&#x27; character within the environment variable.  Disable with an exclamation point.</dt>
+<p class="indent">
+<dt>name=nationname The name of the nation to be used may be specified using this option. Be sure to use a comma to end it, if there are any additional options after it.</dt>
+<p class="indent">
+<dt>data=campaign Finally, the campaign may be specified through the use of this option. It should also be distinguished from following option through the use of a comma.</dt>
+</dl>
+<p>
+As an example, if a player using csh wished to enable &quot;gaudy&quot; and 
+&quot;water-bottoms&quot;, along with disabling &quot;all-blanks&quot;, they could use the 
+following, which would also set their name and campaign: 
+<pre class="screen">
+        setenv CONQ_OPTS &#x27;Gw!b,name=Mordor,data=MiddleEarth&#x27;
+</pre>
+<p>
+While the environment variable cannot be used to specify display 
+modes, screen characters, or pager variables, it does have a number of 
+useful features which can make it easy to override customization file 
+settings. 
+<h2>The Command Line</h2>
+<p>
+There are two main programs which compose the Conquer system: conquer, 
+the user interface, and conqrun, the administrative interface.  If you 
+wish to get an exact list of the options available when running each 
+program, you may use &quot;conquer -\?&quot; or &quot;conqrun -\?&quot; respectively. 
+<p>
+To the sake of completeness, I will list all of the command line 
+options for both here as well.  For the conquer command, the options 
+are: 
+<pre class="screen">
+  Command line format: conquer [-nc] [-BbeGHhilMpsw -d DIR -nNAT]
+        -nc      do not read in .conqrc file [first option only]
+        -n NAT   play as nation NAT
+        -d DIR   use to access different campaign
+        -B       use blanks, not underlines [toggle]
+        -b       always underline water [toggle]
+        -e       don&#x27;t check for system email [toggle]
+        -G       highlight name in news [toggle]
+        -H       use header-mode option [toggle]
+        -i       don&#x27;t set info-mode option [toggle]
+        -t       don&#x27;t enable warning bells [toggle]
+        -w       draw water with no underlines [toggle]
+        -X       enable expert status [toggle]
+        -l       dislay list of user logged in
+        -h       print help text
+        -P       print a map with highlighting
+        -p       print a map
+        -s       print scores
+        -M       edit the MOTD, if allowed
+        -D       dump nation information
+</pre>
+<p>
+Those selections with the [toggle] at the end are the Conquer 
+configuration options, which indicate, by the presence or absence of 
+the string &quot;don&#x27;t &quot;, what will be done if they are enabled on the 
+command line.  The conqrun command also have a number of selections: 
+<pre class="screen">
+  Command line format: conqrun [-nc] [-ACEQITZamx -dDIR]
+        -nc      do not read in .conqrc file [first option only]
+        -E       edit the world campaign settings
+        -I       display some statistics
+        -A       add some npc nations to the nations file
+        -Q       examine the combat dice probabilities
+        -T       (dis/en)able logins; 120 sec time to finish for those in
+        -Z       delete all npc nation specifications
+        -a       add new player
+        -d DIR   to specify a different game directory
+        -o ofile send update output to the given file
+        -m       make a world
+        -x       execute program
+</pre>
+<p>
+As you can tell from the above lists, you may avoid reading in the 
+Most of the Conquer settings are just parallels of the environment 
+variable options, except that they act as toggles.  To find out 
+exactly what each option does, you can probably just try it out and 
+see what happens. 
+</main>
+</body>
+</html>

@@ -15,6 +15,7 @@ class NationCreate(BaseModel):
 class NationOut(BaseModel):
     id: uuid.UUID
     world_id: uuid.UUID
+    user_id: uuid.UUID | None
     name: str
     leader_title: str
     race: str
@@ -33,6 +34,21 @@ class NationOut(BaseModel):
     metals: int
     food: int
     wood: int
+
+    # Resources produced this turn
+    talons_produced: int
+    jewels_produced: int
+    metals_produced: int
+    food_produced: int
+    wood_produced: int
+
+    # Magic powers
+    power_fire: int
+    power_water: int
+    power_earth: int
+
+    # Key attributes
+    attr_morale: int
 
     # Aggregates
     total_civilians: int

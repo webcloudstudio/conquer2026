@@ -136,3 +136,27 @@ li { margin: 4px 0; }
   main { margin-left: 0; padding: 20px; }
   .grid2 { grid-template-columns: 1fr; }
 }
+
+/* Original docs sidebar helpers */
+.nav-sep { border-top: 1px solid var(--border); margin: 8px 4px; list-style: none; padding: 0; }
+.nav-group {
+  color: var(--muted); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.5px; padding: 6px 12px 2px; list-style: none;
+}
+
+/* Original docs content blocks */
+pre.screen {
+  background: #0d1117; border: 1px solid var(--border); border-radius: 4px;
+  padding: 12px 16px; overflow-x: auto; font-size: 12px; line-height: 1.5;
+}
+pre.table {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+  padding: 12px 16px; overflow-x: auto; font-size: 12px;
+}
+p.see-also {
+  color: var(--muted); font-size: 13px;
+  border-left: 3px solid var(--border); padding-left: 10px;
+}
+p.indent { padding-left: 24px; }
+dt { font-weight: bold; margin-top: 8px; color: var(--text); }
+dd { margin-left: 24px; color: var(--muted); }
