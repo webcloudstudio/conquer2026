@@ -54,7 +54,7 @@ docker compose exec backend alembic upgrade head
 
 # 4. Open the game
 #    Frontend:  http://localhost:5174
-#    API docs:  http://localhost:8000/docs</code></pre>
+#    API docs:  http://localhost:8001/docs</code></pre>
 
   <div class="callout">
     The first <code>docker compose up</code> builds images and may take a few minutes.
@@ -65,7 +65,7 @@ docker compose exec backend alembic upgrade head
   <table>
     <tr><th>Service</th><th>URL / Port</th><th>Description</th></tr>
     <tr><td><code>frontend</code></td><td><a href="http://localhost:5174">localhost:5174</a></td><td>React game UI (nginx)</td></tr>
-    <tr><td><code>backend</code></td><td><a href="http://localhost:8000">localhost:8000</a></td><td>FastAPI REST API</td></tr>
+    <tr><td><code>backend</code></td><td><a href="http://localhost:8001">localhost:8001</a></td><td>FastAPI REST API</td></tr>
     <tr><td><code>db</code></td><td>localhost:5432</td><td>PostgreSQL 16</td></tr>
     <tr><td><code>redis</code></td><td>localhost:6379</td><td>Redis (Celery broker)</td></tr>
     <tr><td><code>worker</code></td><td>—</td><td>Celery turn processor</td></tr>
@@ -89,7 +89,7 @@ DATABASE_URL=postgresql+asyncpg://user:pass@localhost/conquer \
 npm install
 
 # Set backend URL
-echo "VITE_API_URL=http://localhost:8000" > .env
+echo "VITE_API_URL=http://localhost:8001" > .env
 
 # Start dev server
 npm run dev
@@ -102,7 +102,7 @@ npm run dev
     <tr><td><code>REDIS_URL</code></td><td>redis://redis:6379/0</td><td>Redis/Celery broker</td></tr>
     <tr><td><code>SECRET_KEY</code></td><td>change-me-in-production</td><td>JWT signing key — <strong>change this!</strong></td></tr>
     <tr><td><code>DEBUG</code></td><td>false</td><td>Enables SQL echo and stack traces</td></tr>
-    <tr><td><code>VITE_API_URL</code></td><td>http://localhost:8000</td><td>Frontend → backend URL</td></tr>
+    <tr><td><code>VITE_API_URL</code></td><td>http://localhost:8001</td><td>Frontend → backend URL</td></tr>
   </table>
 
   <div class="callout warning">

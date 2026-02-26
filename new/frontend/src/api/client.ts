@@ -16,13 +16,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// On 401, clear token and redirect to login
+// On 401, clear token. Only redirect to /login if not already on an auth page.
 api.interceptors.response.use(
   (r) => r,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      const onAuthPage = ["/login", "/register"].some((p) =>
+        window.location.pathname.startsWith(p)
+      );
+      if (!onAuthPage) {
+        window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
+      }
     }
     return Promise.reject(err);
   }

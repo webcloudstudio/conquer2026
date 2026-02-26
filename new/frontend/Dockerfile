@@ -6,7 +6,7 @@ RUN npm ci
 COPY frontend/ .
 # Copy static docs into public/ so Vite includes them in the build output
 COPY docs/ ./public/docs/
-ARG VITE_API_URL=http://localhost:8000
+ARG VITE_API_URL=http://localhost:8001
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 

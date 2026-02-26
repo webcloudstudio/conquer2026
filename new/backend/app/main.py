@@ -14,7 +14,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5174"],  # React game UI (nginx)
+    allow_origins=["http://localhost:5174"],  # React game UI (nginx on host port 5174)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -25,8 +25,8 @@ export function RegisterPage() {
       await loadMe();
       navigate(next);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { detail?: string } } };
-      setError(e?.response?.data?.detail || "Registration failed");
+      const e = err as { response?: { data?: { detail?: string } }; message?: string };
+      setError(e?.response?.data?.detail || e?.message || "Registration failed. Check the browser console for details.");
     } finally {
       setLoading(false);
     }
