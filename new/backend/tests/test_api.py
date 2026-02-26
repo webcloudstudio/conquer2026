@@ -6,7 +6,6 @@ Uses in-memory SQLite via the shared client fixture.
 import pytest
 import pytest_asyncio
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
