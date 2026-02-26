@@ -160,7 +160,7 @@ export function ManageWorldsPage() {
                   <div style={s.cardTop}>
                     <div>
                       <span style={s.worldName}>{w.name}</span>
-                      <span style={s.meta}> · Turn {w.turn} · {w.mapx}×{w.mapy} · {w.player_count}/{w.max_players} players</span>
+                      <span style={s.meta}> · Turn {w.turn} · {w.mapx}×{w.mapy} · {w.player_count}/{w.max_players} players · {w.npc_count} NPCs · {w.pwater}% water · {w.pmount}% mnt</span>
                       {w.is_maintenance && <span style={s.maintBadge}>MAINT</span>}
                     </div>
                     <div style={s.adminList}>

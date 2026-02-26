@@ -32,6 +32,9 @@ class WorldOut(BaseModel):
     admins: list[WorldAdminInfo] = []
     max_players: int = 20
     player_count: int = 0
+    npc_count: int = 0
+    pwater: int = 35
+    pmount: int = 20
 
     model_config = {"from_attributes": True}
 

@@ -17,6 +17,9 @@ export interface World {
   admins: WorldAdmin[];
   max_players: number;
   player_count: number;
+  npc_count: number;
+  pwater: number;
+  pmount: number;
 }
 
 export interface Nation {

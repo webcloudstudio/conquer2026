@@ -74,7 +74,7 @@ export function GamePage() {
     <div style={styles.root}>
       {/* Top bar */}
       <header style={styles.header}>
-        <button style={styles.backBtn} onClick={() => navigate("/")}>← Worlds</button>
+        <button style={styles.backBtn} onClick={() => navigate("/worlds")}>← Worlds</button>
         <span style={styles.worldName}>{world?.name ?? "..."}</span>
         <div style={styles.tabs}>
           {(["armies", "nations"] as Tab[]).map((t) => (

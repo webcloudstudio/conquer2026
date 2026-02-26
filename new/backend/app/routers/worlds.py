@@ -22,6 +22,8 @@ router = APIRouter(prefix="/worlds", tags=["worlds"])
 def _world_to_out(w: World) -> dict:
     """Serialize a World ORM instance to a dict matching WorldOut."""
     player_count = sum(1 for n in w.nations if not n.is_npc and n.is_active)
+    npc_count = sum(1 for n in w.nations if n.is_npc and n.is_active)
+    cfg = w.config or {}
     return {
         "id": w.id,
         "name": w.name,
@@ -34,6 +36,9 @@ def _world_to_out(w: World) -> dict:
         "admins": [{"user_id": u.id, "username": u.username} for u in w.admins],
         "max_players": w.max_players,
         "player_count": player_count,
+        "npc_count": npc_count,
+        "pwater": cfg.get("pwater", 35),
+        "pmount": cfg.get("pmount", 20),
     }
 
 

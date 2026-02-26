@@ -97,6 +97,9 @@ export function OpenWorldsPage() {
             <p style={s.meta}>
               Turn {w.turn} · {w.mapx}×{w.mapy} map · {w.player_count}/{w.max_players} players
             </p>
+            <p style={s.meta}>
+              {w.npc_count} NPC nations · {w.pwater}% water · {w.pmount}% mountains
+            </p>
             <p style={s.adminLine}>
               Admin{w.admins.length !== 1 ? "s" : ""}: {" "}
               <span style={s.adminNames}>
