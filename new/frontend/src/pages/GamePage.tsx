@@ -13,8 +13,6 @@ import {
   listSectors, listArmies, listMyArmies, listNations, getWorld, getMyNation,
 } from "../api/game";
 import type { Army, Nation, Sector, World } from "../types";
-import { useAuthStore } from "../store/auth";
-
 type Tab = "armies" | "nations";
 
 // BFS to compute reachable hexes (even-r offset)
@@ -63,7 +61,6 @@ function computeReachable(
 export function GamePage() {
   const { worldId } = useParams<{ worldId: string }>();
   const navigate = useNavigate();
-  const { user } = useAuthStore();
 
   const [world, setWorld] = useState<World | null>(null);
   const [sectors, setSectors] = useState<Sector[]>([]);
@@ -73,7 +70,6 @@ export function GamePage() {
   const [myNation, setMyNation] = useState<Nation | null>(null);
   const [selectedHex, setSelectedHex] = useState<{ x: number; y: number } | null>(null);
   const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
-  const [selectedArmy, setSelectedArmy] = useState<Army | null>(null);
   const [movementRange, setMovementRange] = useState<{ x: number; y: number }[] | null>(null);
   const [centerHex, setCenterHex] = useState<{ x: number; y: number } | null>(null);
   const [tab, setTab] = useState<Tab>("armies");
@@ -106,7 +102,6 @@ export function GamePage() {
   }
 
   function handleSelectArmy(army: Army | null) {
-    setSelectedArmy(army);
     if (army) {
       setMovementRange(computeReachable(army, sectors));
     } else {

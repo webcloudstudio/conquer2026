@@ -103,11 +103,6 @@ export function HexMap({
     armyByHex.get(key)!.push(a);
   }
 
-  // Movement range set for quick lookup
-  const rangeSet = new Set<string>(
-    (movementRange ?? []).map((h) => `${h.x},${h.y}`)
-  );
-
   // Center map when centerHex changes
   useEffect(() => {
     if (!centerHex) return;
