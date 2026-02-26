@@ -5,8 +5,8 @@ New system designed for the reboot; no direct C equivalent.
 See the plan for the full artifact list and mechanics.
 """
 
-import uuid
 import enum
+import uuid
 
 from sqlalchemy import Boolean, Float, ForeignKey, SmallInteger, String
 from sqlalchemy.dialects.postgresql import UUID

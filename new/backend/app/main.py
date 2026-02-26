@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import auth, worlds, nations, admin
+from app.routers import admin, armies, auth, messages, nations, sectors, worlds
 
 app = FastAPI(
     title=settings.project_name,
@@ -23,6 +23,9 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(worlds.router)
 app.include_router(nations.router)
+app.include_router(sectors.router)
+app.include_router(armies.router)
+app.include_router(messages.router)
 app.include_router(admin.router)
 
 

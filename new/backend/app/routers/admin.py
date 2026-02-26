@@ -11,6 +11,8 @@ from app.database import get_db
 from app.models.user import User
 from app.models.world import World
 from app.routers.auth import require_admin
+from app.services.turn_service import execute_turn
+from app.services.world_service import initialize_world
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -21,16 +23,46 @@ async def process_turn(
     db: Annotated[AsyncSession, Depends(get_db)],
     _admin: Annotated[User, Depends(require_admin)],
 ) -> dict:
-    """Manually trigger turn processing for a world. (Phase 2: engine not yet implemented.)"""
+    """Manually trigger turn processing for a world."""
+    result = await db.execute(select(World).where(World.id == world_id))
+    world = result.scalar_one_or_none()
+    if not world:
+        raise HTTPException(status_code=404, detail="World not found")
+    if world.is_maintenance:
+        raise HTTPException(status_code=423, detail="World is in maintenance mode")
+
+    return await execute_turn(world, db)
+
+
+@router.post("/worlds/{world_id}/initialize")
+async def init_world(
+    world_id: uuid.UUID,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    _admin: Annotated[User, Depends(require_admin)],
+    mapx: int = 79,
+    mapy: int = 49,
+    pwater: int = 35,
+    pmount: int = 20,
+    npc_count: int = 8,
+    seed: int | None = None,
+) -> dict:
+    """Generate map and NPC nations for a world. Mirrors conqrun -m."""
     result = await db.execute(select(World).where(World.id == world_id))
     world = result.scalar_one_or_none()
     if not world:
         raise HTTPException(status_code=404, detail="World not found")
 
-    # TODO Phase 2: call engine.turn_processor.process_turn(world, db)
-    world.turn += 1
-    await db.commit()
-    return {"world_id": str(world_id), "new_turn": world.turn, "status": "processed"}
+    gen = await initialize_world(
+        world, db, mapx=mapx, mapy=mapy, pwater=pwater,
+        pmount=pmount, npc_count=npc_count, seed=seed,
+    )
+    return {
+        "world_id": str(world_id),
+        "sectors": len(gen.sectors),
+        "npc_nations": min(npc_count, len(gen.npc_spawn_points)),
+        "mapx": mapx,
+        "mapy": mapy,
+    }
 
 
 @router.post("/worlds/{world_id}/maintenance")

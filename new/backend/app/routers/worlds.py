@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.user import User
 from app.models.world import World
-from app.routers.auth import get_current_user, require_admin
+from app.routers.auth import require_admin
 from app.schemas.world import WorldCreate, WorldOut
 
 router = APIRouter(prefix="/worlds", tags=["worlds"])

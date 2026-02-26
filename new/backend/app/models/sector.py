@@ -5,8 +5,8 @@ Derived from SCT_STRUCT in gpl-release/Include/dataX.h.
 Sectors are addressed by (world_id, x, y).
 """
 
-import uuid
 import enum
+import uuid
 
 from sqlalchemy import BigInteger, ForeignKey, SmallInteger, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
