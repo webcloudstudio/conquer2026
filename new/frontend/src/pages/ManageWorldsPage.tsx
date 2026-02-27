@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { listMyWorlds, processTurn, toggleMaintenance, addWorldAdmin } from "../api/game";
+import { listMyWorlds, processTurn, toggleMaintenance, addWorldAdmin, deleteWorld } from "../api/game";
 import { api } from "../api/client";
 import type { World } from "../types";
 import { useAuthStore } from "../store/auth";
@@ -100,6 +100,18 @@ export function ManageWorldsPage() {
     }
   }
 
+  async function handleDelete(w: World) {
+    if (!window.confirm(`Delete "${w.name}"? World data will be archived to disk. This cannot be undone.`)) return;
+    try {
+      const r = await deleteWorld(w.id);
+      addLog(`✓ "${r.world_name}" deleted — archived to data/${r.archived_to}`);
+      await loadWorlds();
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { detail?: string } } };
+      addLog(`✗ Delete: ${err?.response?.data?.detail ?? "error"}`);
+    }
+  }
+
   async function handleAddAdmin(worldId: string) {
     const username = coAdminInputs[worldId]?.trim();
     if (!username) return;
@@ -168,10 +180,11 @@ export function ManageWorldsPage() {
                     </div>
                   </div>
                   <div style={s.actions}>
-                    <button style={s.btnWarn} onClick={() => handleTurn(w)}>Process Turn</button>
-                    <button style={s.btnGhost} onClick={() => handleMaint(w)}>
-                      {w.is_maintenance ? "Disable Maintenance Mode" : "Enable Maintenance Mode"}
+                    <button style={s.btnGreen} onClick={() => handleTurn(w)}>⚙ Process Turn</button>
+                    <button style={s.btnYellow} onClick={() => handleMaint(w)}>
+                      {w.is_maintenance ? "✓ Disable Maintenance" : "⚠ Enable Maintenance"}
                     </button>
+                    <button style={s.btnDanger} onClick={() => handleDelete(w)}>🗑 Delete World</button>
                   </div>
                   <div style={s.coAdminRow}>
                     <input
@@ -341,13 +354,17 @@ const s: Record<string, React.CSSProperties> = {
     padding: "4px 12px", background: "#21262d", border: "1px solid #30363d",
     borderRadius: 5, color: "#c9d1d9", cursor: "pointer", fontSize: 12,
   },
-  btnWarn: {
-    padding: "4px 12px", background: "#7b2020", border: "1px solid #a33",
-    borderRadius: 5, color: "#faa", cursor: "pointer", fontSize: 12,
+  btnGreen: {
+    padding: "4px 12px", background: "#1a4a2a", border: "1px solid #2ea043",
+    borderRadius: 5, color: "#3fb950", cursor: "pointer", fontSize: 12, fontWeight: 600,
   },
-  btnGhost: {
-    padding: "4px 12px", background: "none", border: "1px solid #30363d",
-    borderRadius: 5, color: "#8b949e", cursor: "pointer", fontSize: 12,
+  btnYellow: {
+    padding: "4px 12px", background: "#3a2a00", border: "1px solid #b8860b",
+    borderRadius: 5, color: "#e6a817", cursor: "pointer", fontSize: 12,
+  },
+  btnDanger: {
+    padding: "4px 12px", background: "#3a1010", border: "1px solid #9b1c1c",
+    borderRadius: 5, color: "#f87171", cursor: "pointer", fontSize: 12,
   },
   coAdminIn: {
     flex: 1, padding: "5px 10px", background: "#0d1117", border: "1px solid #30363d",

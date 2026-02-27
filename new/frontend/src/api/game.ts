@@ -71,3 +71,6 @@ export const processTurn = (worldId: string) =>
 
 export const toggleMaintenance = (worldId: string) =>
   api.post(`/admin/worlds/${worldId}/maintenance`).then((r) => r.data);
+
+export const deleteWorld = (worldId: string) =>
+  api.delete<{ archived_to: string; world_name: string }>(`/admin/worlds/${worldId}`).then((r) => r.data);

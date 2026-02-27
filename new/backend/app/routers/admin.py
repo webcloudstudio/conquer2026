@@ -1,7 +1,10 @@
 """Admin endpoints — turn processing, maintenance mode, world management, user management."""
 
+import enum
+import json
 import uuid
 from datetime import datetime
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -10,12 +13,36 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.models.army import Army
+from app.models.command import Command
+from app.models.message import Message
+from app.models.nation import Nation
+from app.models.sector import Sector
 from app.models.user import User
 from app.models.world import World
 from app.routers.auth import require_admin, require_world_admin
 from app.services.turn_service import execute_turn
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+_DATA_DIR = Path("/app/data")
+
+
+def _to_json_safe(val):
+    """Make a column value JSON-serializable."""
+    if val is None:
+        return None
+    if isinstance(val, uuid.UUID):
+        return str(val)
+    if isinstance(val, datetime):
+        return val.isoformat()
+    if isinstance(val, enum.Enum):
+        return val.value
+    return val
+
+
+def _row_to_dict(row) -> dict:
+    return {col.name: _to_json_safe(getattr(row, col.name)) for col in row.__table__.columns}
 
 
 class UserAdminOut(BaseModel):
@@ -49,6 +76,41 @@ async def toggle_maintenance(
     world.is_maintenance = not world.is_maintenance
     await db.commit()
     return {"world_id": str(world.id), "maintenance": world.is_maintenance}
+
+
+@router.delete("/worlds/{world_id}")
+async def delete_world(
+    world: Annotated[World, Depends(require_world_admin)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> dict:
+    """Archive all world data to disk then soft-delete the world. Requires world admin."""
+    nation_rows = (await db.execute(select(Nation).where(Nation.world_id == world.id))).scalars().all()
+    nation_ids = [n.id for n in nation_rows]
+
+    sector_rows = (await db.execute(select(Sector).where(Sector.world_id == world.id))).scalars().all()
+    army_rows = (await db.execute(select(Army).where(Army.nation_id.in_(nation_ids)))).scalars().all() if nation_ids else []
+    message_rows = (await db.execute(select(Message).where(Message.world_id == world.id))).scalars().all()
+    command_rows = (await db.execute(select(Command).where(Command.world_id == world.id))).scalars().all()
+
+    archive = {
+        "archived_at": datetime.utcnow().isoformat(),
+        "world": _row_to_dict(world),
+        "nations": [_row_to_dict(n) for n in nation_rows],
+        "sectors": [_row_to_dict(s) for s in sector_rows],
+        "armies": [_row_to_dict(a) for a in army_rows],
+        "messages": [_row_to_dict(m) for m in message_rows],
+        "commands": [_row_to_dict(c) for c in command_rows],
+    }
+
+    _DATA_DIR.mkdir(parents=True, exist_ok=True)
+    safe_name = "".join(c for c in world.name if c.isalnum() or c in "-_") or "world"
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    filename = f"archive_{safe_name}_{timestamp}.json"
+    (_DATA_DIR / filename).write_text(json.dumps(archive, indent=2))
+
+    world.is_active = False
+    await db.commit()
+    return {"archived_to": filename, "world_id": str(world.id), "world_name": world.name}
 
 
 # ---------------------------------------------------------------------------
