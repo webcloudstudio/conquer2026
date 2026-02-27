@@ -8,6 +8,7 @@ import { UnitTypeName } from "../types";
 import { orderAttack, orderDisband, orderMove } from "../api/game";
 
 const GUIDE_KEY = "armyGuideCollapsed";
+const STEPS_KEY = "firstStepsCollapsed";
 
 interface Props {
   worldId: string;
@@ -27,11 +28,20 @@ export function ArmyPanel({
   const [guideCollapsed, setGuideCollapsed] = useState(
     () => localStorage.getItem(GUIDE_KEY) === "1"
   );
+  const [stepsCollapsed, setStepsCollapsed] = useState(
+    () => localStorage.getItem(STEPS_KEY) === "1"
+  );
 
   function toggleGuide() {
     const next = !guideCollapsed;
     setGuideCollapsed(next);
     localStorage.setItem(GUIDE_KEY, next ? "1" : "0");
+  }
+
+  function toggleSteps() {
+    const next = !stepsCollapsed;
+    setStepsCollapsed(next);
+    localStorage.setItem(STEPS_KEY, next ? "1" : "0");
   }
 
   function selectArmy(army: Army) {
@@ -81,6 +91,24 @@ export function ArmyPanel({
 
   return (
     <div style={styles.container}>
+      {/* First steps guide */}
+      <div style={styles.guide}>
+        <button style={styles.guideToggle} onClick={toggleSteps}>
+          🏰 First Steps {stepsCollapsed ? "▸" : "▾"}
+        </button>
+        {!stepsCollapsed && (
+          <ol style={styles.guideList}>
+            <li>Click <strong>📍 Find</strong> on your army to locate your capital (★)</li>
+            <li>Click your capital sector → <strong>designate it</strong> (it may already be a Capital)</li>
+            <li>Click adjacent sectors and designate them as <strong>Farms</strong> to produce food</li>
+            <li>Build <strong>Mines</strong> for metals &amp; jewels, <strong>Cities</strong> for income</li>
+            <li>Armies consume food each turn — keep your reserves above zero</li>
+            <li>Move armies into unclaimed sectors to <strong>capture territory</strong></li>
+            <li>Orders execute when the turn is processed (~every 6 hours)</li>
+          </ol>
+        )}
+      </div>
+
       {/* Collapsible how-to guide */}
       <div style={styles.guide}>
         <button style={styles.guideToggle} onClick={toggleGuide}>

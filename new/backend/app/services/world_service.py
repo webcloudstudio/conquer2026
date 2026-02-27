@@ -190,6 +190,21 @@ async def initialize_player_nation(
     for k, v in _START_RESOURCES.items():
         setattr(nation, k, v)
 
+    # Claim a small ring of adjacent sectors as farms (mirrors NPC + C original place())
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        nx, ny = spawn_x + dx, spawn_y + dy
+        ring_result = await db.execute(
+            select(Sector).where(
+                Sector.world_id == world_id,
+                Sector.x == nx,
+                Sector.y == ny,
+            )
+        )
+        ring_sct = ring_result.scalar_one_or_none()
+        if ring_sct and ring_sct.owner_nation_id is None and ring_sct.altitude > 0:
+            ring_sct.owner_nation_id = nation.id
+            ring_sct.designation = Designation.FARM
+
     # Starting army
     army = Army(
         id=uuid.uuid4(),

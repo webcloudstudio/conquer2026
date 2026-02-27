@@ -2,6 +2,9 @@
 Newest entries first.
 
 ## 2026-02
+- Fixed new player join: POST /nations now calls initialize_player_nation(), giving starting resources (5k talons, 2k food, 500 metals/wood, 100 jewels), a 2000-strength army at capital, and 4 surrounding farm sectors
+- Fixed new player join: initialize_player_nation() now claims ring of adjacent sectors as farms (mirrors NPC + original C place() behavior)
+- Game UI: ArmyPanel shows collapsible "🏰 First Steps" guide (7 steps: locate capital, designate sectors, build farms/mines/cities, army food, capturing territory, turn timing)
 - Fixed player nation detection: added GET /worlds/{id}/nations/mine backend endpoint
 - NationOut schema now returns user_id, attr_morale, power_*, and *_produced fields
 - Game UI: NationDashboard now renders (was always null-blocked); shows production rates (+N) per resource

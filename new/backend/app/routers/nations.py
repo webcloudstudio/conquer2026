@@ -1,5 +1,6 @@
 """Nation endpoints — join a game, view nation state."""
 
+import random
 import uuid
 from typing import Annotated
 
@@ -10,10 +11,12 @@ from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.nation import Nation
+from app.models.sector import Sector
 from app.models.user import User
 from app.models.world import World
 from app.routers.auth import get_current_user
 from app.schemas.nation import NationCreate, NationOut
+from app.services.world_service import initialize_player_nation
 
 router = APIRouter(prefix="/worlds/{world_id}/nations", tags=["nations"])
 
@@ -109,4 +112,21 @@ async def join_world(
     db.add(nation)
     await db.commit()
     await db.refresh(nation)
+
+    # Find an unclaimed land sector as spawn point (prefer moderate altitude, high efficiency)
+    candidates_result = await db.execute(
+        select(Sector).where(
+            Sector.world_id == world_id,
+            Sector.owner_nation_id == None,  # noqa: E711
+            Sector.altitude > 0,
+            Sector.altitude < 6,
+        ).order_by(Sector.efficiency.desc())
+    )
+    candidates = candidates_result.scalars().all()
+    if candidates:
+        pool = candidates[:30] if len(candidates) > 30 else candidates
+        spawn = random.choice(pool)
+        await initialize_player_nation(nation, spawn.x, spawn.y, db)
+        await db.refresh(nation)
+
     return nation
